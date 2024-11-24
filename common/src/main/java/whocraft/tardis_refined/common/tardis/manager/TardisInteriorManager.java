@@ -45,7 +45,7 @@ public class TardisInteriorManager extends TickableHandler {
     private boolean isGeneratingDesktop = false;
     private boolean hasGeneratedCorridors = false;
     private int interiorGenerationCooldown = 0;
-    private BlockPos corridorAirlockCenter;
+    private BlockPos corridorAirlockCenter = BlockPos.ZERO;
     private DesktopTheme preparedTheme, currentTheme = TardisDesktops.DEFAULT_OVERGROWN_THEME;
 
     // Pillars
