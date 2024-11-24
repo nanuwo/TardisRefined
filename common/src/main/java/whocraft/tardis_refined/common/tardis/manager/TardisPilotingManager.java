@@ -64,8 +64,11 @@ public class TardisPilotingManager extends TickableHandler {
     private int distanceCovered = 0;
     private int ticksLanding = 0;
     private int ticksTakingOff = 0;
+
+    // Crash Fields
     private int ticksCrashing = 0;
-    private int ticksSinceCrash = 0;
+    private int ticksinCrashRecovery = 0;
+    private boolean isInCrashRecovery = false;
 
     private boolean isCrashing = false;
 
@@ -93,8 +96,13 @@ public class TardisPilotingManager extends TickableHandler {
         this.operator = operator;
     }
 
-    public void endCoolDown() {
-        this.ticksSinceCrash = TICKS_COOLDOWN_MAX;
+    public void endRecovery() {
+        this.isInCrashRecovery = false;
+        this.canUseControls = true;
+        ticksinCrashRecovery = 0;
+        this.operator.getLevel().playSound(null, TardisArchitectureHandler.DESKTOP_CENTER_POS, TRSoundRegistry.TARDIS_SINGLE_FLY.get(), SoundSource.AMBIENT, 100f, 0.25f);
+
+
     }
 
     @Override
@@ -115,7 +123,7 @@ public class TardisPilotingManager extends TickableHandler {
 
 
         this.ticksCrashing = tag.getInt("ticksCrashing");
-        this.ticksSinceCrash = tag.getInt("ticksSinceCrash");
+        this.ticksinCrashRecovery = tag.getInt("ticksinCrashRecovery");
         this.flightDistance = tag.getInt(NbtConstants.FLIGHT_DISTANCE);
         this.distanceCovered = tag.getInt(NbtConstants.DISTANCE_COVERED);
         this.canUseControls = tag.getBoolean("canUseControls");
@@ -144,7 +152,7 @@ public class TardisPilotingManager extends TickableHandler {
         tag.putInt(NbtConstants.SPEED_MODIFIER, this.speedModifier);
 
         tag.putInt("ticksCrashing", this.ticksCrashing);
-        tag.putInt("ticksSinceCrash", this.ticksSinceCrash);
+        tag.putInt("ticksinCrashRecovery", this.ticksinCrashRecovery);
         tag.putInt(NbtConstants.FLIGHT_DISTANCE, this.flightDistance);
         tag.putInt(NbtConstants.DISTANCE_COVERED, this.distanceCovered);
         tag.putBoolean("canUseControls", this.canUseControls);
@@ -200,8 +208,8 @@ public class TardisPilotingManager extends TickableHandler {
             }
         }
 
-        if (ticksSinceCrash > 0) {
-            onCrashCooldownTick();
+        if (ticksinCrashRecovery > 0) {
+            tickCrashRecovery();
         }
 
         if (isPassivelyRefuelling && level.getGameTime() % 60 == 0) {
@@ -299,15 +307,16 @@ public class TardisPilotingManager extends TickableHandler {
         }
     }
 
-    private void onCrashCooldownTick() {
+    private void tickCrashRecovery() {
+        ticksinCrashRecovery++;
 
-        ticksSinceCrash++;
+        if(ticksinCrashRecovery % 120 == 0) {
+            TardisHelper.playCloisterBell(operator);
+        }
 
         // After 10 minutes
-        if (ticksSinceCrash >= TICKS_COOLDOWN_MAX) {
-            this.canUseControls = true;
-            ticksSinceCrash = 0;
-            this.operator.getLevel().playSound(null, TardisArchitectureHandler.DESKTOP_CENTER_POS, TRSoundRegistry.TARDIS_SINGLE_FLY.get(), SoundSource.AMBIENT, 100f, 0.25f);
+        if (ticksinCrashRecovery >= TICKS_COOLDOWN_MAX) {
+            endRecovery();
         }
     }
 
@@ -792,7 +801,7 @@ public class TardisPilotingManager extends TickableHandler {
     public void onCrashEnd() {
         this.isCrashing = false;
         this.ticksCrashing = 0;
-        this.ticksSinceCrash = 1;
+        this.ticksinCrashRecovery = 1;
 
         onFlightEnd();
         TardisCommonEvents.TARDIS_CRASH_EVENT.invoker().onTardisCrash(this.operator, this.targetLocation);
@@ -914,8 +923,8 @@ public class TardisPilotingManager extends TickableHandler {
         return this.autoLand;
     }
 
-    public boolean isOnCooldown() {
-        return (ticksSinceCrash > 0);
+    public boolean isInRecovery() {
+        return (ticksinCrashRecovery > 0);
     }
 
     public GlobalConsoleBlockEntity getCurrentConsole() {
@@ -975,10 +984,10 @@ public class TardisPilotingManager extends TickableHandler {
     /**
      * Accessor for the number of ticks since the Tardis crashed.
      *
-     * @return private field ticksSinceCrash
+     * @return private field ticksinCrashRecovery
      */
     public int getCooldownTicks() {
-        return ticksSinceCrash;
+        return ticksinCrashRecovery;
     }
 
 
@@ -989,7 +998,7 @@ public class TardisPilotingManager extends TickableHandler {
      * @return a percentage value between 0 - 1.
      */
     public float getCooldownDuration() {
-        return (float) ticksSinceCrash / (float) TICKS_COOLDOWN_MAX;
+        return (float) ticksinCrashRecovery / (float) TICKS_COOLDOWN_MAX;
     }
 
     public boolean isCrashing() {

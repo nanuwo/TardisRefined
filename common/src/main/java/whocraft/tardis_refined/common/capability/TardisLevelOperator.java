@@ -43,7 +43,6 @@ import whocraft.tardis_refined.registry.TRBlockRegistry;
 import java.util.Optional;
 import java.util.UUID;
 
-import static whocraft.tardis_refined.common.block.shell.ShellBaseBlock.OPEN;
 import static whocraft.tardis_refined.common.block.shell.ShellBaseBlock.REGEN;
 
 public class TardisLevelOperator{
@@ -166,7 +165,7 @@ public class TardisLevelOperator{
         
         var shouldSync = level.getGameTime() % 40 == 0;
         if (shouldSync) {
-            tardisClientData.setIsOnCooldown(pilotingManager.isOnCooldown());
+            tardisClientData.setIsOnCooldown(pilotingManager.isInRecovery());
             tardisClientData.setShellTheme(aestheticHandler.getShellTheme());
             tardisClientData.setShellPattern(aestheticHandler.shellPattern().id());
             tardisClientData.setHumEntry(interiorManager.getHumEntry());

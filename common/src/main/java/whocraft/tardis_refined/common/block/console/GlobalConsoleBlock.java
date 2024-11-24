@@ -198,8 +198,8 @@ public class GlobalConsoleBlock extends BaseEntityBlock {
                         var operator = operatorOptional.get();
                         TardisPilotingManager pilotManager = operator.getPilotingManager();
 
-                        if (pilotManager.isOnCooldown()) {
-                            pilotManager.endCoolDown();
+                        if (pilotManager.isInRecovery()) {
+                            pilotManager.endRecovery();
                             return InteractionResult.sidedSuccess(false); //Use InteractionResult.sidedSuccess(false) for non-client side. Stops hand swinging twice. We don't want to use InteractionResult.SUCCESS because the client calls SUCCESS, so the server side calling it too sends the hand swinging packet twice.
                         }
                     }

@@ -201,7 +201,7 @@ public class GlobalConsoleBlockEntity extends BlockEntity implements BlockEntity
         if (level instanceof ServerLevel serverLevel) {
             TardisLevelOperator.get(serverLevel).ifPresent(x -> {
 
-                if (x.getPilotingManager().isOnCooldown() && serverLevel.getGameTime() % 20 == 0) {
+                if (x.getPilotingManager().isInRecovery() && serverLevel.getGameTime() % 20 == 0) {
 
                     serverLevel.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, blockPos.getX(), blockPos.getY() + 1.0, blockPos.getZ(), 120, 2.0, 1.0, 2.0, 0.005);
                     serverLevel.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, blockPos.getX(), blockPos.getY() + 1.0, blockPos.getZ(), 120, 2.0, 1.0, 2.0, 0.005);
