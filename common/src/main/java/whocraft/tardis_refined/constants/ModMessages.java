@@ -33,6 +33,7 @@ public class ModMessages {
     public static String LANDING_PAD_NOT_UNLOCKED = message("landing_pad_unlocked");
     public static String LANDING_PAD_TRANSIENT = message("landing_pad_transient");
     public static String TOOLTIP_IN_FLIGHT = message("tooltip_in_flight");
+    public static String RECOVERY_PROGRESS = message("recovery_progress");
 
     public static String FUEL = message("fuel");
     public static String REFUEL = message("refuel_engaged");

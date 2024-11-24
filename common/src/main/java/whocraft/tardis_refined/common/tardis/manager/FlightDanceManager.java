@@ -59,13 +59,16 @@ public class FlightDanceManager extends TickableHandler {
     }
 
     @Override
-    CompoundTag saveData(CompoundTag tag) {
+    public CompoundTag saveData(CompoundTag tag) {
+        tag.putBoolean("weAreDancing", weAreDancing);
+        tag.putInt("damagedControlCount", damagedControlCount);
         return tag;
     }
 
     @Override
-    void loadData(CompoundTag tag) {
-
+    public void loadData(CompoundTag tag) {
+        weAreDancing = tag.getBoolean("weAreDancing");
+        damagedControlCount = tag.getInt("damagedControlCount");
     }
 
     public void stopDancing() {

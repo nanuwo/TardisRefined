@@ -124,6 +124,7 @@ public class TardisPilotingManager extends TickableHandler {
 
         this.ticksCrashing = tag.getInt("ticksCrashing");
         this.ticksinCrashRecovery = tag.getInt("ticksinCrashRecovery");
+        this.isInCrashRecovery = tag.getBoolean("isInCrashRecovery");
         this.flightDistance = tag.getInt(NbtConstants.FLIGHT_DISTANCE);
         this.distanceCovered = tag.getInt(NbtConstants.DISTANCE_COVERED);
         this.canUseControls = tag.getBoolean("canUseControls");
@@ -153,6 +154,7 @@ public class TardisPilotingManager extends TickableHandler {
 
         tag.putInt("ticksCrashing", this.ticksCrashing);
         tag.putInt("ticksinCrashRecovery", this.ticksinCrashRecovery);
+        tag.putBoolean("isInCrashRecovery", this.isInCrashRecovery);
         tag.putInt(NbtConstants.FLIGHT_DISTANCE, this.flightDistance);
         tag.putInt(NbtConstants.DISTANCE_COVERED, this.distanceCovered);
         tag.putBoolean("canUseControls", this.canUseControls);
@@ -310,6 +312,11 @@ public class TardisPilotingManager extends TickableHandler {
     private void tickCrashRecovery() {
         ticksinCrashRecovery++;
 
+        int maxCooldownTicks = 12000; // 10 minutes in ticks
+        int percentage = (int) ((ticksinCrashRecovery / (float) maxCooldownTicks) * 100);
+
+        System.out.println(percentage + "%");
+
         if(ticksinCrashRecovery % 120 == 0) {
             TardisHelper.playCloisterBell(operator);
         }
@@ -317,6 +324,8 @@ public class TardisPilotingManager extends TickableHandler {
         // After 10 minutes
         if (ticksinCrashRecovery >= TICKS_COOLDOWN_MAX) {
             endRecovery();
+        } else {
+            isInCrashRecovery = true;
         }
     }
 
@@ -683,7 +692,7 @@ public class TardisPilotingManager extends TickableHandler {
             for (var player : players) {
                 PlayerUtil.sendMessage(player, Component.translatable("+" + totalPoints + " XP"), true);
             }
-
+            distanceCovered = 0;
             this.operator.tardisClientData().sync();
 
             return true;
@@ -986,7 +995,7 @@ public class TardisPilotingManager extends TickableHandler {
      *
      * @return private field ticksinCrashRecovery
      */
-    public int getCooldownTicks() {
+    public int getCrashRecoveryTicks() {
         return ticksinCrashRecovery;
     }
 

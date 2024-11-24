@@ -148,7 +148,7 @@ public class GlobalConsoleBlock extends BaseEntityBlock {
                 ClientHelper.playParticle((ClientLevel) level, ParticleTypes.CLOUD, new Vec3(xCord, yCord, zCord), 0.0D, 0.05D, 0.0D);
             }
 
-            if (clientData.isOnCooldown() || clientData.isCrashing()) {
+            if (clientData.isInRecovery() || clientData.isCrashing()) {
 
                 ClientHelper.playParticle((ClientLevel) level, ParticleTypes.CAMPFIRE_COSY_SMOKE, new Vec3(xCord, yCord, zCord), 0.0D, 0.1D, 0.0D);
 

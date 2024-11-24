@@ -28,6 +28,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import whocraft.tardis_refined.TardisRefined;
+import whocraft.tardis_refined.client.TardisClientData;
 import whocraft.tardis_refined.common.blockentity.console.GlobalConsoleBlockEntity;
 import whocraft.tardis_refined.common.capability.TardisLevelOperator;
 import whocraft.tardis_refined.common.capability.upgrades.UpgradeHandler;
@@ -36,6 +37,7 @@ import whocraft.tardis_refined.common.tardis.control.ControlSpecification;
 import whocraft.tardis_refined.common.tardis.control.ship.MonitorControl;
 import whocraft.tardis_refined.common.tardis.manager.FlightDanceManager;
 import whocraft.tardis_refined.common.tardis.themes.ConsoleTheme;
+import whocraft.tardis_refined.constants.ModMessages;
 import whocraft.tardis_refined.patterns.sound.ConfiguredSound;
 import whocraft.tardis_refined.common.util.ClientHelper;
 import whocraft.tardis_refined.common.util.LevelHelper;
@@ -140,12 +142,22 @@ public class ControlEntity extends Entity {
 
     @Override
     public Component getName() {
+
+        TardisClientData tardisClientData = TardisClientData.getInstance(level().dimension());
+        if(tardisClientData.isInRecovery()){
+            int cooldownTicks = tardisClientData.getRecoveryTicks();
+            int maxCooldownTicks = 12000; // 10 minutes in ticks
+            int percentage = (int) ((cooldownTicks / (float) maxCooldownTicks) * 100);
+            return Component.translatable(ModMessages.RECOVERY_PROGRESS, percentage + "%");
+        }
+
         if (this.controlSpecification == null) {
             return super.getName();
         }
 
         return Component.translatable(this.controlSpecification.control().getTranslationKey());
     }
+
 
     /** Tell the Tardis that the control is currently continuing to be misaligned
      * @param manager

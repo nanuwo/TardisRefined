@@ -118,6 +118,7 @@ public class TardisLevelOperator{
         compoundTag = this.tardisWaypointManager.saveData(compoundTag);
         compoundTag = this.upgradeHandler.saveData(compoundTag);
         compoundTag = this.aestheticHandler.saveData(compoundTag);
+        compoundTag = this.flightDanceManager.saveData(compoundTag);
 
         compoundTag.putInt("tardis_state", this.tardisState);
 
@@ -142,6 +143,7 @@ public class TardisLevelOperator{
         this.tardisWaypointManager.loadData(tag);
         this.upgradeHandler.loadData(tag);
         this.aestheticHandler.loadData(tag);
+        this.flightDanceManager.loadData(tag);
 
         this.tardisState = tag.getInt("tardis_state");
 
@@ -172,9 +174,11 @@ public class TardisLevelOperator{
             tardisClientData.setFuel(pilotingManager.getFuel());
             tardisClientData.setMaximumFuel(pilotingManager.getMaximumFuel());
             tardisClientData.setTardisState(tardisState);
+            tardisClientData.setRecoveryProgress(pilotingManager.getCrashRecoveryTicks());
 
             tardisClientData.sync();
         } else {
+            tardisClientData.setRecoveryProgress(pilotingManager.getCrashRecoveryTicks());
             tardisClientData.setFlying(pilotingManager.isInFlight());
             tardisClientData.setIsLanding(exteriorManager.isLanding());
             tardisClientData.setIsTakingOff(exteriorManager.isTakingOff());

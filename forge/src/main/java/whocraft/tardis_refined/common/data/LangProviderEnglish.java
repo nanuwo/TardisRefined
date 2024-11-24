@@ -104,6 +104,7 @@ public class LangProviderEnglish extends LanguageProvider {
 
         /*Damage Sources*/
         add(TRDamageSources.EYE_OF_HARMONY, "%s was fried by time winds.");
+        add(TRDamageSources.CHOKE, "%s was overwhelmed by toxic fumes");
 
         /*Entity*/
         add(TREntityRegistry.CONTROL_ENTITY.get(), "Generic Control");
@@ -152,6 +153,7 @@ public class LangProviderEnglish extends LanguageProvider {
         add(ModMessages.DESTINATION, "DESTINATION");
         add(ModMessages.DOOR_LOCKED, "Door locked");
         add(ModMessages.DOOR_UNLOCKED, "Door unlocked");
+        add(ModMessages.RECOVERY_PROGRESS, "Recovery Progress: %s");
 
 
         /*Command*/

@@ -52,6 +52,7 @@ public class TardisClientData {
     private double maximumFuel = 0;
 
     private int tardisState = 0;
+    private int recoveryTicks = 0;
 
 
     //Not saved to disk, no real reason to be
@@ -135,7 +136,7 @@ public class TardisClientData {
         this.isOnCooldown = isCooldown;
     }
 
-    public boolean isOnCooldown() {
+    public boolean isInRecovery() {
         return isOnCooldown;
     }
 
@@ -163,6 +164,7 @@ public class TardisClientData {
 
         compoundTag.putBoolean("flying", flying);
         compoundTag.putInt(NbtConstants.THROTTLE_STAGE, throttleStage);
+        compoundTag.putInt("recoveryTicks", recoveryTicks);
         compoundTag.putBoolean(NbtConstants.HANDBRAKE_ENGAGED, isHandbrakeEngaged);
         compoundTag.putBoolean("isLanding", isLanding);
         compoundTag.putBoolean("isTakingOff", isTakingOff);
@@ -195,7 +197,7 @@ public class TardisClientData {
         isInDangerZone = compoundTag.getBoolean("isInDangerZone");
         flightShakeScale = compoundTag.getFloat("flightShakeScale");
         isOnCooldown = compoundTag.getBoolean("isOnCooldown");
-
+        recoveryTicks = compoundTag.getInt("recoveryTicks");
         // Load shellTheme and shellPattern
         shellTheme = new ResourceLocation(compoundTag.getString("shellTheme"));
         shellPattern = new ResourceLocation(compoundTag.getString("shellPattern"));
@@ -266,5 +268,13 @@ public class TardisClientData {
 
     public void setTardisState(int tardisState) {
         this.tardisState = tardisState;
+    }
+
+    public void setRecoveryProgress(int crashRecoveryTicks) {
+        this.recoveryTicks = crashRecoveryTicks;
+    }
+
+    public int getRecoveryTicks() {
+        return recoveryTicks;
     }
 }

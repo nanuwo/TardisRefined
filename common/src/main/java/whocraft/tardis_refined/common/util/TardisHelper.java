@@ -12,10 +12,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import whocraft.tardis_refined.api.event.ShellChangeSource;
 import whocraft.tardis_refined.api.event.ShellChangeSources;
@@ -37,6 +39,7 @@ import whocraft.tardis_refined.patterns.ShellPatterns;
 import whocraft.tardis_refined.registry.TRBlockRegistry;
 import whocraft.tardis_refined.registry.TRDimensionTypes;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -50,6 +53,21 @@ public class TardisHelper {
         for (int i = 0; i < 3; i++) {
             tardisLevelOperator.getLevel().playSound(null, TardisArchitectureHandler.DESKTOP_CENTER_POS, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 1000f, 0.1f);
         }
+    }
+
+    public static List<Player> getPlayersInRange(Level world, double x, double y, double z, double range) {
+        // Create a bounding box around the specified position
+        AABB boundingBox = new AABB(
+                x - range, y - range, z - range,
+                x + range, y + range, z + range
+        );
+
+        // Get all players within the bounding box
+        return world.getEntitiesOfClass(Player.class, boundingBox);
+    }
+
+    public static List<Player> getPlayersInRange(Level world, Player sourcePlayer, double range) {
+        return getPlayersInRange(world, sourcePlayer.getX(), sourcePlayer.getY(), sourcePlayer.getZ(), range);
     }
 
     public static boolean isInArsArea(BlockPos blockPos) {
