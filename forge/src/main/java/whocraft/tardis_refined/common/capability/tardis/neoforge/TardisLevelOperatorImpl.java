@@ -1,4 +1,4 @@
-package whocraft.tardis_refined.common.capability.neoforge;
+package whocraft.tardis_refined.common.capability.tardis.neoforge;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +14,7 @@ import net.neoforged.neoforge.event.TickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import whocraft.tardis_refined.TardisRefined;
-import whocraft.tardis_refined.common.capability.TardisLevelOperator;
+import whocraft.tardis_refined.common.capability.tardis.TardisLevelOperator;
 import whocraft.tardis_refined.registry.TRDimensionTypes;
 
 import java.util.Optional;
