@@ -4,7 +4,6 @@ package whocraft.tardis_refined.registry.fabric;
 import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryAttribute;
-import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.WritableRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -83,7 +82,7 @@ public class DeferredRegistryImpl {
         }
 
         @Override
-        public ResourceKey<? extends Registry<T>> key(){
+        public ResourceKey<? extends Registry<T>> key() {
             return this.resourceKey;
         }
 
