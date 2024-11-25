@@ -11,13 +11,11 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import whocraft.tardis_refined.TardisRefined;
-import whocraft.tardis_refined.client.ModelRegistry;
-import whocraft.tardis_refined.client.ParticleGallifrey;
-import whocraft.tardis_refined.client.TRItemColouring;
-import whocraft.tardis_refined.client.TRParticles;
+import whocraft.tardis_refined.client.*;
 import whocraft.tardis_refined.client.neoforge.ModelRegistryImpl;
 import whocraft.tardis_refined.client.renderer.blockentity.RootPlantRenderer;
 import whocraft.tardis_refined.client.renderer.blockentity.console.GlobalConsoleRenderer;
@@ -45,6 +43,10 @@ public class ClientModBus {
         item.register(TRItemColouring.SCREWDRIVER_COLORS, TRItemRegistry.SCREWDRIVER.get());
     }
 
+    @SubscribeEvent
+    public static void keyMapping(RegisterKeyMappingsEvent event) {
+        event.register(TRKeybinds.EXIT_EXTERIOR_VIEW);
+    }
 
     @SubscribeEvent
     public static void onBuildTabsContent(BuildCreativeModeTabContentsEvent event) {
