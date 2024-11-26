@@ -23,7 +23,6 @@ public class TardisArchitectureHandler {
 
     public static final BlockPos DESKTOP_CENTER_POS = new BlockPos(0, 100, 0);
     public static final BlockPos EYE_OF_HARMONY_PLACEMENT = new BlockPos(991,41,31);
-    public static final int INTERIOR_SIZE = 150;
 
     public static String currentArsStage = "one";
 
