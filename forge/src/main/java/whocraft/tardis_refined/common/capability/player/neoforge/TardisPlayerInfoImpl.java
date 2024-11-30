@@ -1,10 +1,9 @@
-package whocraft.tardis_refined.common.capability.player.forge;
+package whocraft.tardis_refined.common.capability.player.neoforge;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -36,7 +35,7 @@ public class TardisPlayerInfoImpl {
             e.addCapability(new ResourceLocation(TardisRefined.MODID, "tardis_player_info"), new TardisPlayerInfoProvider(new TardisPlayerInfo(player)));
         }
     }
-    
+
 
     public static Optional<TardisPlayerInfo> get(LivingEntity player) {
         return player.getCapability(TARDIS_PLAYER_INFO).resolve();

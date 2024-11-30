@@ -12,7 +12,6 @@ import whocraft.tardis_refined.TardisRefined;
 import whocraft.tardis_refined.common.capability.tardis.upgrades.Upgrade;
 import whocraft.tardis_refined.common.hum.HumEntry;
 import whocraft.tardis_refined.common.hum.TardisHums;
-import whocraft.tardis_refined.registry.TRUpgrades;
 import whocraft.tardis_refined.common.tardis.control.Control;
 import whocraft.tardis_refined.common.tardis.themes.ShellTheme;
 import whocraft.tardis_refined.constants.ModMessages;
@@ -57,7 +56,7 @@ public class LangProviderEnglish extends LanguageProvider {
 
         //Hum Sounds
         TardisHums.registerDefaultHums();
-        for(Map.Entry<ResourceLocation, HumEntry> entry : TardisHums.getDefaultHums().entrySet()){
+        for (Map.Entry<ResourceLocation, HumEntry> entry : TardisHums.getDefaultHums().entrySet()) {
             addSound(entry.getValue().getSoundEventId(), "TARDIS hums");
         }
 
@@ -128,6 +127,7 @@ public class LangProviderEnglish extends LanguageProvider {
         addControl(TRControlRegistry.GENERIC_NO_SHOW.get(), "Switch");
         addControl(TRControlRegistry.FUEL.get(), "Fuel");
         addControl(TRControlRegistry.READOUT.get(), "GPS");
+        addControl(TRControlRegistry.EXTERIOR_DISPLAY.get(), "Exterior Display");
 
         /*Messages*/
         add(ModMessages.MSG_EXTERIOR_COOLDOWN, "You must wait %s seconds");
@@ -147,7 +147,7 @@ public class LangProviderEnglish extends LanguageProvider {
         add(ModMessages.NO_DESKTOP_NO_FUEL, "Not enough fuel to start the reconfiguration process");
         add(ModMessages.ASTRAL_MANIPULATOR_ENGAGED, "Please make your selection. Right click again to confirm");
         add(ModMessages.ROOT_PLANT_CUT_OPEN, "Roots cover the entrance");
-        add(ModMessages.FUEL, "Fuel: ");
+        add(ModMessages.FUEL, "Fuel: %s");
         add(ModMessages.FUEL_OFFLINE, "Fuel offline");
         add(ModMessages.WAYPOINT_LOADED, "Preloaded waypoint: %s");
         add(ModMessages.HANDBRAKE_ENGAGED, "Handbrake engaged");
@@ -226,6 +226,23 @@ public class LangProviderEnglish extends LanguageProvider {
         add(ModMessages.UI_EJECT_CANNOT_IN_FLIGHT, "Cannot eject whilst in flight");
 
 
+        add("curios.identifier.timelord_sight", "AR Glasses");
+
+
+        /*Create GUI Compatibility*/
+
+       /* add(ModMessages.DOOR_STATUS, "Door: %s");
+        add(ModMessages.LOCK_STATUS, "Locked: %s");
+        add(ModMessages.POSITION, "Position: %s");
+        add(ModMessages.DIRECTION, "Direction: %s");
+        add(ModMessages.DIMENSION, "Dimension: %s");
+        add(ModCompatMessages.createDisplaySource("fuel"), "Fuel");
+        add(ModCompatMessages.createDisplaySource("gps"), "GPS");
+        add(ModCompatMessages.createDisplaySource("destination"), "GPS Destination");
+        add(ModCompatMessages.createDisplaySource("tardis_bigdata"), "Tardis Summary");
+        add(ModCompatMessages.createDisplaySource("door"), "Door Status");
+        add(ModCompatMessages.createDisplaySource("locked"), "Lock Status");*/
+
         /*Shell Themes*/
         addShell(ShellTheme.FACTORY.getId(), "Factory");
         addShell(ShellTheme.POLICE_BOX.getId(), "Police Box");
@@ -260,7 +277,7 @@ public class LangProviderEnglish extends LanguageProvider {
         /*Overlay Messages*/
         add(ModMessages.ASCEND_KEY, "Ascend: %s");
         add(ModMessages.DESCEND_KEY, "Descend: %s");
-        add(ModMessages.EXIT_EXTERNAL_VIEW, "Exit External View: %s");
+        add(ModMessages.EXIT_EXTERNAL_VIEW, "Exit Shell View: ");
 
         /*Upgrades*/
         addUpgrade(TRUpgrades.CHAMELEON_CIRCUIT_SYSTEM.get(), "Chameleon Circuit", "Allows the TARDIS to change it's shape");
@@ -285,6 +302,9 @@ public class LangProviderEnglish extends LanguageProvider {
         addUpgrade(TRUpgrades.SPEED_III.get(), "Speed III", "Flight speed is 25x faster");
         addUpgrade(TRUpgrades.SPEED_IV.get(), "Speed IV", "Flight speed is 50x faster");
 
+        /*Keybinds*/
+        add(ModMessages.KEYBIND_EXIT_VIEW, "Exit Shell View");
+        add(ModMessages.KEYBIND_TOGGLE_INFO_EXTERIOR_VIEW, "(Shell View) Toggle Info");
     }
 
 
