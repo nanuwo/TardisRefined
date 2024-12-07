@@ -25,8 +25,8 @@ import whocraft.tardis_refined.common.tardis.themes.ConsoleTheme;
 
 public class InitiativeConsoleModel extends HierarchicalModel implements ConsoleUnit {
 
-    public static final AnimationDefinition IDLE = JsonToAnimationDefinition.loadAnimation(Minecraft.getInstance().getResourceManager(), new ResourceLocation(TardisRefined.MODID, "animations/console/initiative/idle.json"));
-    public static final AnimationDefinition FLIGHT = JsonToAnimationDefinition.loadAnimation(Minecraft.getInstance().getResourceManager(), new ResourceLocation(TardisRefined.MODID, "animations/console/initiative/flight.json"));
+    public static final AnimationDefinition IDLE = JsonToAnimationDefinition.loadAnimation(Minecraft.getInstance().getResourceManager(), new ResourceLocation(TardisRefined.MODID, "animated/console/initiative/idle.json"));
+    public static final AnimationDefinition FLIGHT = JsonToAnimationDefinition.loadAnimation(Minecraft.getInstance().getResourceManager(), new ResourceLocation(TardisRefined.MODID, "animated/console/initiative/flight.json"));
 
 
     private static final ResourceLocation INITIATIVE_TEXTURE = new ResourceLocation(TardisRefined.MODID, "textures/blockentity/console/initiative/initiative_console.png");
@@ -37,9 +37,9 @@ public class InitiativeConsoleModel extends HierarchicalModel implements Console
 
     public InitiativeConsoleModel(ModelPart root) {
         this.root = root;
-        this.throttle = findPart(this, "bone178");
-        this.rotor_on = findPart(this, "rotor_on");
-        this.handbrake = findPart(this, "bone185");
+        this.throttle = JsonToAnimationDefinition.findPart(this, "bone178");
+        this.rotor_on = JsonToAnimationDefinition.findPart(this, "rotor_on");
+        this.handbrake = JsonToAnimationDefinition.findPart(this, "bone185");
     }
 
     public static LayerDefinition createBodyLayer() {

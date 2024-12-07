@@ -13,6 +13,7 @@ import org.joml.Matrix4f;
 import whocraft.tardis_refined.client.TardisClientData;
 import whocraft.tardis_refined.client.renderer.vortex.VortexRenderer;
 import whocraft.tardis_refined.client.screen.selections.ShellSelectionScreen;
+import whocraft.tardis_refined.common.VortexRegistry;
 import whocraft.tardis_refined.common.capability.player.TardisPlayerInfo;
 
 import java.util.Objects;
@@ -22,7 +23,7 @@ import static whocraft.tardis_refined.client.screen.selections.ShellSelectionScr
 
 public class VortexOverlay {
 
-    public static final VortexRenderer VORTEX = new VortexRenderer(VortexRenderer.VortexTypes.FLOW);
+    public static final VortexRenderer VORTEX = new VortexRenderer(VortexRegistry.CLOUDS.get());
 
     private static double tardisX = 0.0D;
     private static double tardisY = 0.0D;
@@ -42,12 +43,6 @@ public class VortexOverlay {
 
         double speed = 0.01D;
         Minecraft mc = Minecraft.getInstance();
-        float width = gg.guiWidth();
-        float height = gg.guiHeight();
-
-        double radius = 5;
-
-        float yRot = Objects.requireNonNull(mc.getCameraEntity()).getYRot();
 
         if (mc.screen == null) { // Ensure no screen (like inventory) is open
             if (mc.options.keyUp.isDown()) velY += speed;
@@ -87,7 +82,6 @@ public class VortexOverlay {
             }
         }
 
-
         if (velX > 1) velX = 1;
         if (velX < -1) velX = -1;
         if (velY > 1) velY = 1;
@@ -102,7 +96,6 @@ public class VortexOverlay {
     }
 
     public static void renderOverlay(GuiGraphics gg) {
-
         TardisPlayerInfo.get(Minecraft.getInstance().player).ifPresent(tardisPlayerInfo -> {
             /*Activation Logic*/
             TardisClientData tardisClientData = TardisClientData.getInstance(tardisPlayerInfo.getPlayerPreviousPos().getDimensionKey());
@@ -112,6 +105,8 @@ public class VortexOverlay {
             float width = gg.guiWidth();
             float height = gg.guiHeight();
 
+            VORTEX.vortexType = VortexRegistry.VORTEX_DEFERRED_REGISTRY.get(tardisClientData.getVortex());
+
             /*
                 Needs tweaking, but am not quite sure how to fix.
              */
@@ -120,9 +115,9 @@ public class VortexOverlay {
             boolean land = tardisClientData.isLanding() || !tardisClientData.isFlying();
 
             //DEV TESTING
-       /*     takeoff = mc.options.keyShift.isDown();
-            land = !takeoff;
-*/
+            //takeoff = mc.options.keyShift.isDown();
+            //land = !takeoff;
+
             if (takeoff) {
                 DEMAT += (System.currentTimeMillis() - LAST_TIME) / 12000.0f;
             }
@@ -166,7 +161,7 @@ public class VortexOverlay {
 
             Matrix4f perspective = new Matrix4f();
             perspective.perspective((float) Math.toRadians(mc.options.fov().get()), width / height, 1, 9999, false, perspective);
-            perspective.translate(0, 0, 11000f - (float) camdist);
+            perspective.translate(0, 0, 11000f - (float) camdist * mulinv - 5 * mul);
             RenderSystem.setProjectionMatrix(perspective, VertexSorting.DISTANCE_TO_ORIGIN);
 
             pose.pushPose();
