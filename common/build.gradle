@@ -26,6 +26,10 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
         transitive(false)
     }
+
+    // JEI common dependency to add Astral Manipulator support
+    modCompileOnly "mezz.jei:jei-${rootProject.minecraft_version}-common-api:${rootProject.jei_version}"
+
 }
 
 publishing {
