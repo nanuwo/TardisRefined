@@ -26,6 +26,9 @@
       "whocraft.tardis_refined.common.capability.fabric.TRComponents",
       "whocraft.tardis_refined.common.capability.player.fabric.TardisPlayerComponents"
     ],
+    "jei_mod_plugin": [
+      "whocraft.tardis_refined.compat.TRJeiPlugin"
+    ],
     "client": [
       "whocraft.tardis_refined.fabric.TardisRefinedFabricClient"
     ]
