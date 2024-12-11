@@ -10,22 +10,20 @@ import whocraft.tardis_refined.common.blockentity.door.GlobalDoorBlockEntity;
 import whocraft.tardis_refined.compat.ModCompatChecker;
 import whocraft.tardis_refined.compat.portals.ImmersivePortalsClient;
 
-public class LeftRightInteriorDoorModel extends ShellDoorModel {
+public class DualTexInteriorDoorModel extends ShellDoorModel {
 
     private final ModelPart root;
-    public final ModelPart leftDoor;
-    public final ModelPart rightDoor;
+    public final ModelPart open_door;
+    public final ModelPart closed_door;
     private final ModelPart portal;
     private final ModelPart frame;
-    private final float openAmount;
 
-    public LeftRightInteriorDoorModel(ModelPart root, float openAmount) {
+    public DualTexInteriorDoorModel(ModelPart root) {
         this.root = root;
-        this.leftDoor = JsonToAnimationDefinition.findPart(this, "left_door");
+        this.open_door = JsonToAnimationDefinition.findPart(this, "door_open");
+        this.closed_door = JsonToAnimationDefinition.findPart(this, "door_closed");
         this.frame = JsonToAnimationDefinition.findPart(this, "frame");
-        this.rightDoor = JsonToAnimationDefinition.findPart(this, "right_door");
         this.portal = JsonToAnimationDefinition.findPart(this, "portal");
-        this.openAmount = openAmount;
     }
 
 
@@ -44,6 +42,8 @@ public class LeftRightInteriorDoorModel extends ShellDoorModel {
             modelPart.visible = true;
         });
         this.portal.visible = false;
+        closed_door.visible = !open;
+        open_door.visible = open;
         this.root().render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
@@ -75,13 +75,7 @@ public class LeftRightInteriorDoorModel extends ShellDoorModel {
 
     @Override
     public void setDoorPosition(boolean open) {
-        if (open) {
-            this.leftDoor.yRot = -openAmount;
-            this.rightDoor.yRot = openAmount;
-        } else {
-            this.leftDoor.yRot = 0;
-            this.rightDoor.yRot = 0;
-        }
+        // No OP
     }
 
 }
