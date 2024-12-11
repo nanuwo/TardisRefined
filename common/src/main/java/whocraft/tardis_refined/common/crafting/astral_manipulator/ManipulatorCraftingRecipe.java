@@ -134,11 +134,11 @@ public class ManipulatorCraftingRecipe implements CraftingRecipe {
 
     @Override
     public ItemStack getResultItem(RegistryAccess registryAccess) {
-        if (result.type() instanceof ManipulatorItemResult manipulatorItemResult) {
+        if (result instanceof ManipulatorItemResult manipulatorItemResult) {
             return manipulatorItemResult.recipeOutput();
         }
 
-        if (result.type() instanceof ManipulatorBlockResult manipulatorBlockResult) {
+        if (result instanceof ManipulatorBlockResult manipulatorBlockResult) {
             return new ItemStack(manipulatorBlockResult.recipeOutput().getBlock().asItem());
         }
 
