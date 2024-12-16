@@ -252,6 +252,7 @@ public class LangProviderEnglish extends LanguageProvider {
         add(ModMessages.CANNOT_START_NO_FUEL, "Not enough fuel to start");
         add(ModMessages.UI_MONITOR_EJECT, "EMERGENCY EJECT");
         add(ModMessages.UI_EJECT_CANNOT_IN_FLIGHT, "Cannot eject whilst in flight");
+        add(ModMessages.UI_JEI_VISIBLE_RECIPE_LAYERS, "Visible layers: %s");
         add(ModMessages.DIM_NOT_ALLOWED, "This dimension cannot be sampled");
         add(ModMessages.DIM_ALREADY_SAVED, "Already contains a sample");
         add(ModMessages.DIM_POTENTIAL, "Sampled %s");

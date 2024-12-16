@@ -125,7 +125,7 @@ dependencies {
     modImplementation "curse.maven:huge-structure-blocks-474114:4803539"
 
     // JEI runtime mod (the compile dependency is declared in the common build.gradle)
-    modRuntimeOnly "mezz.jei:jei-${rootProject.minecraft_version}-fabric:${rootProject.jei_version}"
+    modLocalRuntime "mezz.jei:jei-${rootProject.minecraft_version}-fabric:${rootProject.jei_version}"
 
     // Trinkets
     modImplementation ("dev.emi:trinkets:${rootProject.trinkets_version}") {
