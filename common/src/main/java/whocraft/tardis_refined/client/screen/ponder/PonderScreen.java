@@ -75,16 +75,16 @@ public class PonderScreen extends MonitorOS {
     @Override
     protected void init() {
         super.init();
-        int vPos = (height - monitorHeight) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
         addCancelButton(width / 2 - 105, height - vPos - 25);
     }
 
     @Override
     public ObjectSelectionList<SelectionListEntry> createSelectionList() {
         int leftPos = width / 2;
-        int topPos = (height - monitorHeight) / 2;
+        int topPos = (height - MONITOR_HEIGHT) / 2;
         GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(
-                this.minecraft, 105, 80, leftPos, topPos + 15, topPos + monitorHeight - 30, 12
+                this.minecraft, 105, 80, leftPos, topPos + 15, topPos + MONITOR_HEIGHT - 30, 12
         );
         selectionList.setRenderBackground(false);
 

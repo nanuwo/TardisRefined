@@ -10,20 +10,14 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import whocraft.tardis_refined.TardisRefined;
 import whocraft.tardis_refined.client.screen.ScreenHelper;
 import whocraft.tardis_refined.client.screen.components.BackgroundlessButton;
 import whocraft.tardis_refined.client.screen.components.GenericMonitorSelectionList;
 import whocraft.tardis_refined.client.screen.components.SelectionListEntry;
-import whocraft.tardis_refined.client.screen.ponder.PonderListScreen;
-import whocraft.tardis_refined.client.screen.ponder.PonderScreen;
 import whocraft.tardis_refined.client.screen.screens.DesktopSelectionScreen;
 import whocraft.tardis_refined.client.screen.screens.HumSelectionScreen;
 import whocraft.tardis_refined.client.screen.screens.VortexSelectionScreen;
-import whocraft.tardis_refined.common.VortexRegistry;
 import whocraft.tardis_refined.common.capability.tardis.upgrades.UpgradeHandler;
-import whocraft.tardis_refined.common.crafting.astral_manipulator.ManipulatorCraftingRecipe;
-import whocraft.tardis_refined.common.crafting.astral_manipulator.ManipulatorRecipes;
 import whocraft.tardis_refined.common.network.messages.C2SEjectPlayer;
 import whocraft.tardis_refined.common.network.messages.player.C2SBeginShellView;
 import whocraft.tardis_refined.common.network.messages.screens.C2SRequestShellSelection;
@@ -58,8 +52,8 @@ public class MonitorScreen extends MonitorOS.MonitorOSExtension {
     @Override
     protected void init() {
         super.init();
-        int hPos = (width - monitorWidth) / 2;
-        int vPos = (height - monitorHeight) / 2;
+        int hPos = (width - MONITOR_WIDTH) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
 
         //shellSelectButton.active = TRUpgrades.CHAMELEON_CIRCUIT_SYSTEM.get().isUnlocked(upgradeHandler);
 /*
@@ -77,7 +71,7 @@ public class MonitorScreen extends MonitorOS.MonitorOSExtension {
         ejectbtn = addRenderableWidget(Button.builder(Component.translatable(ModMessages.UI_MONITOR_EJECT), button -> {
             new C2SEjectPlayer().send();
             Minecraft.getInstance().setScreen(null);
-        }).pos(-35 + hPos + monitorWidth / 2, vPos + monitorHeight - 20).size(70, 20).build());
+        }).pos(-35 + hPos + MONITOR_WIDTH / 2, vPos + MONITOR_HEIGHT - 20).size(70, 20).build());
 
     }
 
@@ -87,17 +81,17 @@ public class MonitorScreen extends MonitorOS.MonitorOSExtension {
 
         PoseStack poseStack = guiGraphics.pose();
 
-        int hPos = (width - monitorWidth) / 2;
-        int vPos = (height - monitorHeight) / 2;
+        int hPos = (width - MONITOR_WIDTH) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
 
         poseStack.pushPose();
         int b = height - vPos, r = width - hPos;
-        int l1 = hPos + monitorWidth / 5, l2 = (int) (hPos + monitorWidth / 2.5f);
+        int l1 = hPos + MONITOR_WIDTH / 5, l2 = (int) (hPos + MONITOR_WIDTH / 2.5f);
 
         guiGraphics.fill(l1, vPos, r, b, -1072689136);
         poseStack.translate(l1, vPos, 0);
         poseStack.mulPose(Axis.ZP.rotationDegrees(90));
-        guiGraphics.fillGradient(0, 0, monitorHeight, l1 - hPos, -1072689136, 0x00000000);
+        guiGraphics.fillGradient(0, 0, MONITOR_HEIGHT, l1 - hPos, -1072689136, 0x00000000);
         poseStack.popPose();
     }
 
@@ -105,13 +99,13 @@ public class MonitorScreen extends MonitorOS.MonitorOSExtension {
     public void inMonitorRender(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         PoseStack poseStack = guiGraphics.pose();
         int upgradesLeftPos = width / 2 - 75;
-        int hPos = (width - monitorWidth) / 2;
-        int vPos = (height - monitorHeight) / 2;
+        int hPos = (width - MONITOR_WIDTH) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
 
 
-        this.ejectbtnshow = (mouseY >= vPos + monitorHeight - 20 && mouseY <= vPos + monitorHeight) && (mouseX >= -35 + hPos + monitorWidth / 2 && mouseX <= 70 - 35 + hPos + monitorWidth / 2);
+        this.ejectbtnshow = (mouseY >= vPos + MONITOR_HEIGHT - 20 && mouseY <= vPos + MONITOR_HEIGHT) && (mouseX >= -35 + hPos + MONITOR_WIDTH / 2 && mouseX <= 70 - 35 + hPos + MONITOR_WIDTH / 2);
 
-        ejectbtn.setPosition(-35 + hPos + monitorWidth / 2, vPos + monitorHeight - ejectbtntime);
+        ejectbtn.setPosition(-35 + hPos + MONITOR_WIDTH / 2, vPos + MONITOR_HEIGHT - ejectbtntime);
         ejectbtn.active = ejectbtntime == 20;
 
 
@@ -134,7 +128,7 @@ public class MonitorScreen extends MonitorOS.MonitorOSExtension {
         poseStack.popPose();
 
         poseStack.pushPose();
-        poseStack.translate(hPos + 10, vPos + monitorHeight - 35, 0);
+        poseStack.translate(hPos + 10, vPos + MONITOR_HEIGHT - 35, 0);
         guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable(ModMessages.UI_MONITOR_DESTINATION).getString() + ":", 0, 0, Color.WHITE.getRGB());
         ScreenHelper.renderWidthScaledText(targetLocation.getDirection().getName().toUpperCase() + " @ " + targetLocation.getPosition().toShortString(), guiGraphics, Minecraft.getInstance().font, 0, 10, Color.LIGHT_GRAY.getRGB(), textScale * 2, 0.75F, false);
         ScreenHelper.renderWidthScaledText(MiscHelper.getCleanDimensionName(targetLocation.getDimensionKey()), guiGraphics, Minecraft.getInstance().font, 0, 20, Color.LIGHT_GRAY.getRGB(), textScale - 3, 1.5F, false);
@@ -155,8 +149,8 @@ public class MonitorScreen extends MonitorOS.MonitorOSExtension {
     @Override
     public GenericMonitorSelectionList<SelectionListEntry> createSelectionList() {
         int hPos = -20 + width / 2;
-        int vPos = 20 + (height - monitorHeight) / 2;
-        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 15 + monitorWidth / 2, 80, hPos, vPos, height - vPos, 12);
+        int vPos = 20 + (height - MONITOR_HEIGHT) / 2;
+        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 15 + MONITOR_WIDTH / 2, 80, hPos, vPos, height - vPos, 12);
         selectionList.setRenderBackground(false);
         selectionList.children().add(new SelectionListEntry(Component.translatable(ModMessages.UI_EXTERNAL_SHELL), entry -> new C2SRequestShellSelection().send(), hPos, TRUpgrades.CHAMELEON_CIRCUIT_SYSTEM.get().isUnlocked(upgradeHandler)));
         selectionList.children().add(new SelectionListEntry(Component.translatable(ModMessages.UI_DESKTOP_CONFIGURATION), entry -> switchScreenToRight(new DesktopSelectionScreen()), hPos, TRUpgrades.INSIDE_ARCHITECTURE.get().isUnlocked(upgradeHandler)));

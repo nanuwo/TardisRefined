@@ -4,17 +4,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import whocraft.tardis_refined.client.renderer.vortex.VortexRenderer;
 import whocraft.tardis_refined.client.screen.components.GenericMonitorSelectionList;
 import whocraft.tardis_refined.client.screen.components.SelectionListEntry;
 import whocraft.tardis_refined.client.screen.main.MonitorOS;
 import whocraft.tardis_refined.common.VortexRegistry;
 import whocraft.tardis_refined.common.network.messages.C2SChangeVortex;
-import whocraft.tardis_refined.common.tardis.themes.ShellTheme;
 import whocraft.tardis_refined.constants.ModMessages;
 
 import java.util.Collection;
@@ -36,12 +33,12 @@ public class VortexSelectionScreen extends MonitorOS {
         super.init();
         this.setEvents(() -> selectVortex(currentVortex), () -> {
             //selectVortex(currentVortex);
-            if (PREVIOUS != null)
-                this.switchScreenToLeft(PREVIOUS);
+            if (previous != null)
+                this.switchScreenToLeft(previous);
         });
         if (currentVortex == null)
             currentVortex = this.vortexList.get(0);
-        int vPos = (height - monitorHeight) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
         addSubmitButton(width / 2 + 90, height - vPos - 25);
         addCancelButton(width / 2 - 11, height - vPos - 25);
     }
@@ -58,13 +55,13 @@ public class VortexSelectionScreen extends MonitorOS {
 
         PoseStack poseStack = guiGraphics.pose();
 
-        int hPos = (width - monitorWidth) / 2;
-        int vPos = (height - monitorHeight) / 2;
+        int hPos = (width - MONITOR_WIDTH) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
 
         poseStack.pushPose();
 
         int b = height - vPos, r = width - hPos;
-        int l1 = hPos + monitorWidth / 4, l2 = hPos + monitorWidth / 2;
+        int l1 = hPos + MONITOR_WIDTH / 4, l2 = hPos + MONITOR_WIDTH / 2;
 
         guiGraphics.fill(l2, vPos, r, b, -1072689136);
 
@@ -77,8 +74,8 @@ public class VortexSelectionScreen extends MonitorOS {
     @Override
     public GenericMonitorSelectionList<SelectionListEntry> createSelectionList() {
         int leftPos = width / 2;
-        int topPos = (height - monitorHeight) / 2;
-        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 105, 80, leftPos, topPos + 15, topPos + monitorHeight - 30, 12);
+        int topPos = (height - MONITOR_HEIGHT) / 2;
+        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 105, 80, leftPos, topPos + 15, topPos + MONITOR_HEIGHT - 30, 12);
 
         selectionList.setRenderBackground(false);
 

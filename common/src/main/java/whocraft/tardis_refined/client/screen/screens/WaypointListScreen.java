@@ -18,9 +18,7 @@ import whocraft.tardis_refined.common.network.messages.waypoints.C2SOpenCoordina
 import whocraft.tardis_refined.common.network.messages.waypoints.C2SOpenEditCoordinatesDisplayMessage;
 import whocraft.tardis_refined.common.network.messages.waypoints.C2SRemoveWaypointEntry;
 import whocraft.tardis_refined.common.network.messages.waypoints.C2STravelToWaypoint;
-import whocraft.tardis_refined.common.tardis.TardisDesktops;
 import whocraft.tardis_refined.common.tardis.TardisWaypoint;
-import whocraft.tardis_refined.common.tardis.themes.DesktopTheme;
 import whocraft.tardis_refined.constants.ModMessages;
 
 import java.awt.*;
@@ -55,7 +53,7 @@ public class WaypointListScreen extends MonitorOS {
         }, () -> {
             if (waypoint != null)
                 new C2SRemoveWaypointEntry(waypoint.getId()).send();
-            this.switchScreenToLeft(PREVIOUS);
+            this.switchScreenToLeft(previous);
 
         });
 
@@ -65,7 +63,7 @@ public class WaypointListScreen extends MonitorOS {
         newWaypointButton.setTooltip(Tooltip.create(Component.translatable(ModMessages.UI_MONITOR_WAYPOINT_CREATE)));
         newWaypointButton.setPosition(width / 2 + 85, (height) / 2 - 60);
 
-        int vPos = (height - monitorHeight) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
         addCancelButton(width / 2 - 105, height - vPos - 25);
 
         this.loadButton = this.addRenderableWidget(CommonTRWidgets.imageButton(20, Component.translatable("Submit"), (arg) -> {
@@ -101,9 +99,9 @@ public class WaypointListScreen extends MonitorOS {
 
     @Override
     public GenericMonitorSelectionList<SelectionListEntry> createSelectionList() {
-        int vPos = (height - monitorHeight) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
         int leftPos = this.width / 2 - 75;
-        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 150, 80, leftPos, vPos + 15, vPos + monitorHeight - 30, 12);
+        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 150, 80, leftPos, vPos + 15, vPos + MONITOR_HEIGHT - 30, 12);
         selectionList.setRenderBackground(false);
 
         Collection<TardisWaypoint> values = WAYPOINTS;

@@ -44,20 +44,20 @@ import java.util.UUID;
 public class MonitorOS extends Screen {
 
     public static ResourceLocation FRAME = new ResourceLocation(TardisRefined.MODID, "textures/gui/monitor/frame_brass.png");
-    protected static final int frameWidth = 256, frameHeight = 180;
-    protected static final int monitorWidth = 230, monitorHeight = 130;
+    protected static final int FRAME_WIDTH = 256, FRAME_HEIGHT = 180;
+    protected static final int MONITOR_WIDTH = 230, MONITOR_HEIGHT = 130;
     public final ResourceLocation backdrop;
     public static final VortexRenderer VORTEX = new VortexRenderer(VortexRegistry.CLOUDS.get());
     public static ResourceLocation currentVortex = VortexRegistry.VORTEX_REGISTRY.getKey(VortexRegistry.CLOUDS.get());
-    public static ResourceLocation NOISE = new ResourceLocation(TardisRefined.MODID, "textures/gui/monitor/noise.png");
-    public static ResourceLocation SYMBLS = new ResourceLocation(TardisRefined.MODID, "textures/gui/monitor/gallifreyan_symbols.png");
+    public static final ResourceLocation NOISE = new ResourceLocation(TardisRefined.MODID, "textures/gui/monitor/noise.png");
+    public static final ResourceLocation SYMBOLS = new ResourceLocation(TardisRefined.MODID, "textures/gui/monitor/gallifreyan_symbols.png");
 
-    public MonitorOS LEFT;
-    public MonitorOS RIGHT;
-    public MonitorOS PREVIOUS;
+    public MonitorOS left;
+    public MonitorOS right;
+    public MonitorOS previous;
 
     public static final ResourceLocation BUTTON_LOCATION = new ResourceLocation(TardisRefined.MODID, "save");
-    public static final ResourceLocation BCK_LOCATION = new ResourceLocation(TardisRefined.MODID, "back");
+    public static final ResourceLocation BACK_LOCATION = new ResourceLocation(TardisRefined.MODID, "back");
     public int shakeX, shakeY, age, transitionStartTime = -1;
     public float shakeAlpha;
     private MonitorOSRun onSubmit;
@@ -80,8 +80,8 @@ public class MonitorOS extends Screen {
     }
 
     public void render2Background(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        int hPos = (width - monitorWidth) / 2;
-        int vPos = (height - monitorHeight) / 2;
+        int hPos = (width - MONITOR_WIDTH) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
 
         guiGraphics.enableScissor(0, 0, width, vPos + shakeY);
         super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
@@ -101,8 +101,8 @@ public class MonitorOS extends Screen {
     public void renderVortex(@NotNull GuiGraphics guiGraphics) {
         PoseStack poseStack = guiGraphics.pose();
 
-        int hPos = (width - monitorWidth) / 2;
-        int vPos = (height - monitorHeight) / 2;
+        int hPos = (width - MONITOR_WIDTH) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
 
         guiGraphics.enableScissor(hPos + shakeX, vPos + shakeY, width - hPos + shakeX, height - vPos + shakeY);
         RenderSystem.backupProjectionMatrix();
@@ -128,9 +128,9 @@ public class MonitorOS extends Screen {
 
     public void renderBackdrop(@NotNull GuiGraphics guiGraphics) {
         if (backdrop == null) return;
-        int hPos = (width - monitorWidth) / 2;
-        int vPos = (height - monitorHeight) / 2;
-        guiGraphics.blit(backdrop, hPos, vPos, 0, 0, monitorWidth, monitorHeight);
+        int hPos = (width - MONITOR_WIDTH) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
+        guiGraphics.blit(backdrop, hPos, vPos, 0, 0, MONITOR_WIDTH, MONITOR_HEIGHT);
         int b = height - vPos, r = width - hPos;
         guiGraphics.fill(hPos, vPos, r, b, 0x40000000);
     }
@@ -141,8 +141,8 @@ public class MonitorOS extends Screen {
         RenderSystem.enableBlend();
         renderVortex(guiGraphics);
 
-        int hPos = (width - monitorWidth) / 2;
-        int vPos = (height - monitorHeight) / 2;
+        int hPos = (width - MONITOR_WIDTH) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
 
         guiGraphics.enableScissor(hPos, vPos, width - hPos, height - vPos);
 
@@ -156,38 +156,38 @@ public class MonitorOS extends Screen {
         poseStack.scale(2, 2, 1);
         poseStack.mulPose(Axis.ZP.rotationDegrees((float) (System.currentTimeMillis() % 5400L) / 15L));
         poseStack.translate(-31 / 2f, -31 / 2f, 0);
-        guiGraphics.blit(SYMBLS, 0, 0, 32 * (symb % 8), 32 * (symb / 8), 32, 32);
+        guiGraphics.blit(SYMBOLS, 0, 0, 32 * (symb % 8), 32 * (symb / 8), 32, 32);
         poseStack.popPose();
 
         symb = 3 % 64;
         poseStack.pushPose();
-        poseStack.translate(hPos + monitorWidth - 10, vPos + monitorHeight - 10, 0);
+        poseStack.translate(hPos + MONITOR_WIDTH - 10, vPos + MONITOR_HEIGHT - 10, 0);
         poseStack.scale(2, 2, 1);
         poseStack.mulPose(Axis.ZP.rotationDegrees((float) (System.currentTimeMillis() % 5400L) / 15L));
         poseStack.translate(-31 / 2f, -31 / 2f, 0);
-        guiGraphics.blit(SYMBLS, 0, 0, 32 * (symb % 8), 32 * (symb / 8), 32, 32);
+        guiGraphics.blit(SYMBOLS, 0, 0, 32 * (symb % 8), 32 * (symb / 8), 32, 32);
         poseStack.popPose();
 
         symb = 9 % 64;
         poseStack.pushPose();
-        poseStack.translate(hPos + 10, vPos + monitorHeight - 10, 0);
+        poseStack.translate(hPos + 10, vPos + MONITOR_HEIGHT - 10, 0);
         poseStack.scale(2, 2, 1);
         poseStack.mulPose(Axis.ZP.rotationDegrees(-(float) (System.currentTimeMillis() % 5400L) / 15L));
         poseStack.translate(-31 / 2f, -31 / 2f, 0);
-        guiGraphics.blit(SYMBLS, 0, 0, 32 * (symb % 8), 32 * (symb / 8), 32, 32);
+        guiGraphics.blit(SYMBOLS, 0, 0, 32 * (symb % 8), 32 * (symb / 8), 32, 32);
         poseStack.popPose();
 
         symb = 8 % 64;
         poseStack.pushPose();
-        poseStack.translate(hPos + monitorWidth - 10, vPos + 10, 0);
+        poseStack.translate(hPos + MONITOR_WIDTH - 10, vPos + 10, 0);
         poseStack.scale(2, 2, 1);
         poseStack.mulPose(Axis.ZP.rotationDegrees(-(float) (System.currentTimeMillis() % 5400L) / 15L));
         poseStack.translate(-31 / 2f, -31 / 2f, 0);
-        guiGraphics.blit(SYMBLS, 0, 0, 32 * (symb % 8), 32 * (symb / 8), 32, 32);
+        guiGraphics.blit(SYMBOLS, 0, 0, 32 * (symb % 8), 32 * (symb / 8), 32, 32);
         poseStack.popPose();
 
-        boolean right = RIGHT != null && PREVIOUS != null && RIGHT == PREVIOUS && transitionStartTime >= 0;
-        boolean left = LEFT != null && PREVIOUS != null && LEFT == PREVIOUS && transitionStartTime >= 0;
+        boolean right = this.right != null && previous != null && this.right == previous && transitionStartTime >= 0;
+        boolean left = this.left != null && previous != null && this.left == previous && transitionStartTime >= 0;
         float t = (age - transitionStartTime + partialTick) / 10f;
         float o = -0.5f * Mth.cos(Mth.PI * t) + 0.5f;
 
@@ -197,18 +197,18 @@ public class MonitorOS extends Screen {
         RenderSystem.enableBlend();
         if (right || left) RenderSystem.setShaderColor(1, 1, 1, 1 - o);
         if (right) {
-            RIGHT.renderBackdrop(guiGraphics);
-            poseStack.translate(monitorWidth * o, 0, 0);
-            RIGHT.doRender(guiGraphics, mouseX, mouseY, partialTick);
+            this.right.renderBackdrop(guiGraphics);
+            poseStack.translate(MONITOR_WIDTH * o, 0, 0);
+            this.right.doRender(guiGraphics, mouseX, mouseY, partialTick);
         }
 
         if (left) {
-            LEFT.renderBackdrop(guiGraphics);
-            poseStack.translate(-monitorWidth * o, 0, 0);
-            LEFT.doRender(guiGraphics, mouseX, mouseY, partialTick);
+            this.left.renderBackdrop(guiGraphics);
+            poseStack.translate(-MONITOR_WIDTH * o, 0, 0);
+            this.left.doRender(guiGraphics, mouseX, mouseY, partialTick);
         }
 
-        if (right || left) poseStack.translate(right ? -monitorWidth : monitorWidth, 0, 0);
+        if (right || left) poseStack.translate(right ? -MONITOR_WIDTH : MONITOR_WIDTH, 0, 0);
         RenderSystem.setShaderColor(1, 1, 1, 1);
         doRender(guiGraphics, mouseX, mouseY, partialTick);
 
@@ -217,7 +217,7 @@ public class MonitorOS extends Screen {
         guiGraphics.disableScissor();
         RenderSystem.enableBlend();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, (shakeAlpha + 1 - partialTick) / 100.0f);
-        guiGraphics.blit(NOISE, hPos + shakeX, vPos + shakeY, (int) (Math.random() * 736), (int) (414 * (System.currentTimeMillis() % 1000) / 1000.0), monitorWidth, monitorHeight);
+        guiGraphics.blit(NOISE, hPos + shakeX, vPos + shakeY, (int) (Math.random() * 736), (int) (414 * (System.currentTimeMillis() % 1000) / 1000.0), MONITOR_WIDTH, MONITOR_HEIGHT);
         RenderSystem.setShaderColor(1, 1, 1, 1);
 
         renderFrame(guiGraphics, mouseX, mouseY, partialTick);
@@ -228,17 +228,17 @@ public class MonitorOS extends Screen {
         inMonitorRender(guiGraphics, mouseX, mouseY, partialTick);
         RenderSystem.setShaderColor(1, 1, 1, 1);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
-        ScreenHelper.renderWidthScaledText(title.getString(), guiGraphics, Minecraft.getInstance().font, width / 2f, 5 + (height - monitorHeight) / 2f, Color.LIGHT_GRAY.getRGB(), 300, true);
+        ScreenHelper.renderWidthScaledText(title.getString(), guiGraphics, Minecraft.getInstance().font, width / 2f, 5 + (height - MONITOR_HEIGHT) / 2f, Color.LIGHT_GRAY.getRGB(), 300, true);
     }
 
     public void inMonitorRender(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
     }
 
     public void renderFrame(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        int hPos = (width - frameWidth) / 2;
-        int vPos = -13 + (height - monitorHeight) / 2;
+        int hPos = (width - FRAME_WIDTH) / 2;
+        int vPos = -13 + (height - MONITOR_HEIGHT) / 2;
 
-        guiGraphics.blit(FRAME, hPos + shakeX, vPos + shakeY, 0, 0, frameWidth, frameHeight);
+        guiGraphics.blit(FRAME, hPos + shakeX, vPos + shakeY, 0, 0, FRAME_WIDTH, FRAME_HEIGHT);
     }
 
     @Override
@@ -262,17 +262,17 @@ public class MonitorOS extends Screen {
     }
 
     public void switchScreenToLeft(MonitorOS next) {
-        this.LEFT = next;
-        next.PREVIOUS = this;
-        next.RIGHT = this;
+        this.left = next;
+        next.previous = this;
+        next.right = this;
         next.transition();
         Minecraft.getInstance().setScreen(next);
     }
 
     public void switchScreenToRight(MonitorOS next) {
-        this.RIGHT = next;
-        next.PREVIOUS = this;
-        next.LEFT = this;
+        this.right = next;
+        next.previous = this;
+        next.left = this;
         next.transition();
         Minecraft.getInstance().setScreen(next);
     }
@@ -295,7 +295,7 @@ public class MonitorOS extends Screen {
 
     public void addCancelButton(int x, int y) {
         if (onCancel != null) {
-            SpriteIconButton spriteiconbutton = this.addRenderableWidget(CommonTRWidgets.imageButton(20, Component.translatable("Cancel"), (arg) -> this.onCancel.onPress(), true, BCK_LOCATION));
+            SpriteIconButton spriteiconbutton = this.addRenderableWidget(CommonTRWidgets.imageButton(20, Component.translatable("Cancel"), (arg) -> this.onCancel.onPress(), true, BACK_LOCATION));
             spriteiconbutton.setPosition(x, y);
         }
     }

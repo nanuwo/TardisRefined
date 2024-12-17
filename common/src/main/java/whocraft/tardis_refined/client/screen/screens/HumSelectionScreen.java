@@ -36,11 +36,11 @@ public class HumSelectionScreen extends MonitorOS {
     protected void init() {
         super.init();
         this.setEvents(() -> HumSelectionScreen.selectHum(currentHumEntry), () -> {
-            if (PREVIOUS != null)
-                this.switchScreenToLeft(PREVIOUS);
+            if (previous != null)
+                this.switchScreenToLeft(previous);
         });
         this.currentHumEntry = grabHum();
-        int vPos = (height - monitorHeight) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
         addSubmitButton(width / 2 + 85, height - vPos - 25);
         addCancelButton(width / 2 - 105, height - vPos - 25);
     }
@@ -54,9 +54,9 @@ public class HumSelectionScreen extends MonitorOS {
 
     @Override
     public ObjectSelectionList<SelectionListEntry> createSelectionList() {
-        int vPos = (height - monitorHeight) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
         int leftPos = this.width / 2 - 75;
-        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 150, 80, leftPos, vPos + 15, vPos + monitorHeight - 30, 12);
+        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 150, 80, leftPos, vPos + 15, vPos + MONITOR_HEIGHT - 30, 12);
         selectionList.setRenderBackground(false);
 
         Collection<HumEntry> knownHums = TardisHums.getRegistry().values();
