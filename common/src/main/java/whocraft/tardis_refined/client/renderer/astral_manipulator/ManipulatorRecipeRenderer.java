@@ -22,7 +22,7 @@ public class ManipulatorRecipeRenderer {
     private final Minecraft minecraft = Minecraft.getInstance();
 
     private final ManipulatorCraftingRecipe recipe;
-    private final int xSize, ySize, zSize;
+    private final float centreX, centreY, centreZ;
     private int age = 0;
 
     // Variables for rotation
@@ -45,9 +45,9 @@ public class ManipulatorRecipeRenderer {
             minZ = Math.min(minZ, pos.getZ());
             maxZ = Math.max(maxZ, pos.getZ());
         }
-        xSize = maxX - minX;
-        ySize = maxY - minY;
-        zSize = maxZ - minZ;
+        centreX = (maxX - minX + 1) / 2f;
+        centreY = (maxY - minY + 1) / 2f;
+        centreZ = (maxZ - minZ + 1) / 2f;
     }
 
     public void render(@NotNull GuiGraphics guiGraphics) {
@@ -57,12 +57,10 @@ public class ManipulatorRecipeRenderer {
 
         Lighting.setupFor3DItems();
         pose.pushPose();
-        pose.translate((float) width / 2 - 50, height / 2f, 500);
+        pose.translate((float) width / 2 - 55, height / 2f, 500);
         pose.mulPose(Axis.XP.rotationDegrees(rotationX / 2));
         pose.mulPose(Axis.YP.rotationDegrees(rotationY));
         pose.scale(-20, -20, -20);
-        pose.translate(-xSize / 2f, -ySize / 2f, -zSize / 2f);
-
 
         int i = 0;
         int e = age / 10;
@@ -71,7 +69,8 @@ public class ManipulatorRecipeRenderer {
             BlockState s = ingredient.inputBlockState();
             BlockPos pos = ingredient.relativeBlockPos();
             pose.pushPose();
-            pose.translate(pos.getX(), pos.getY(), pos.getZ());
+            // Translate blocks relative to the centre pos, so that the model rotates around the centre
+            pose.translate(pos.getX() - centreX,  pos.getY() - centreY, pos.getZ() - centreZ);
             assert minecraft.level != null;
             RenderSystem.setShaderColor(1, 1, 1, 1);
             minecraft.getBlockRenderer().renderSingleBlock(s, guiGraphics.pose(), guiGraphics.bufferSource(), LightTexture.FULL_BLOCK, OverlayTexture.NO_OVERLAY);
