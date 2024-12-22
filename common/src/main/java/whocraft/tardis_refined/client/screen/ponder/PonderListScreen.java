@@ -1,6 +1,5 @@
 package whocraft.tardis_refined.client.screen.ponder;
 
-import com.mojang.brigadier.StringReader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.network.chat.Component;
@@ -10,12 +9,7 @@ import whocraft.tardis_refined.client.screen.components.GenericMonitorSelectionL
 import whocraft.tardis_refined.client.screen.components.SelectionListEntry;
 import whocraft.tardis_refined.client.screen.main.MonitorOS;
 import whocraft.tardis_refined.common.crafting.astral_manipulator.ManipulatorCraftingRecipe;
-import whocraft.tardis_refined.common.hum.HumEntry;
-import whocraft.tardis_refined.common.hum.TardisHums;
-import whocraft.tardis_refined.common.util.MiscHelper;
 
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 
 public class PonderListScreen extends MonitorOS {
@@ -26,9 +20,9 @@ public class PonderListScreen extends MonitorOS {
 
     @Override
     public ObjectSelectionList<SelectionListEntry> createSelectionList() {
-        int vPos = (height - monitorHeight) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
         int leftPos = this.width / 2 - 75;
-        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 150, 80, leftPos, vPos + 15, vPos + monitorHeight - 30, 12);
+        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 150, 80, leftPos, vPos + 15, vPos + MONITOR_HEIGHT - 30, 12);
         selectionList.setRenderBackground(false);
 
         if (Minecraft.getInstance().level == null) return null;

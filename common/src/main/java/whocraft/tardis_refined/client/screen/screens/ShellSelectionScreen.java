@@ -6,7 +6,6 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -14,8 +13,6 @@ import whocraft.tardis_refined.client.screen.components.GenericMonitorSelectionL
 import whocraft.tardis_refined.client.screen.components.SelectionListEntry;
 import whocraft.tardis_refined.client.screen.main.MonitorOS;
 import whocraft.tardis_refined.common.network.messages.C2SChangeShell;
-import whocraft.tardis_refined.common.tardis.TardisDesktops;
-import whocraft.tardis_refined.common.tardis.themes.DesktopTheme;
 import whocraft.tardis_refined.common.tardis.themes.ShellTheme;
 import whocraft.tardis_refined.constants.ModMessages;
 import whocraft.tardis_refined.patterns.ShellPatterns;
@@ -38,12 +35,12 @@ public class ShellSelectionScreen extends MonitorOS.MonitorOSExtension {
                 () -> selectShell(CURRENTSHELLTHEME),
                 () -> {
                     //selectShell(CURRENTSHELLTHEME);
-                    if (PREVIOUS != null)
-                        this.switchScreenToLeft(PREVIOUS);
+                    if (previous != null)
+                        this.switchScreenToLeft(previous);
                 }
         );
 
-        int vPos = (height - monitorHeight) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
 
         addSubmitButton(width / 2 + 90, height - vPos - 25);
         addCancelButton(width / 2 - 11, height - vPos - 25);
@@ -64,13 +61,13 @@ public class ShellSelectionScreen extends MonitorOS.MonitorOSExtension {
 
         PoseStack poseStack = guiGraphics.pose();
 
-        int hPos = (width - monitorWidth) / 2;
-        int vPos = (height - monitorHeight) / 2;
+        int hPos = (width - MONITOR_WIDTH) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
 
         poseStack.pushPose();
 
         int b = height - vPos, r = width - hPos;
-        int l1 = hPos + monitorWidth / 4, l2 = hPos + monitorWidth / 2;
+        int l1 = hPos + MONITOR_WIDTH / 4, l2 = hPos + MONITOR_WIDTH / 2;
 
         guiGraphics.fill(l2, vPos, r, b, -1072689136);
 
@@ -88,8 +85,8 @@ public class ShellSelectionScreen extends MonitorOS.MonitorOSExtension {
     @Override
     public GenericMonitorSelectionList<SelectionListEntry> createSelectionList() {
         int leftPos = width / 2;
-        int topPos = (height - monitorHeight) / 2;
-        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 105, 80, leftPos, topPos + 15, topPos + monitorHeight - 30, 12);
+        int topPos = (height - MONITOR_HEIGHT) / 2;
+        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 105, 80, leftPos, topPos + 15, topPos + MONITOR_HEIGHT - 30, 12);
         selectionList.setRenderBackground(false);
 
         Collection<ShellTheme> values = ShellTheme.SHELL_THEME_REGISTRY.stream().toList();

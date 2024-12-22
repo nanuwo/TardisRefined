@@ -59,7 +59,7 @@ public class WaypointManageScreen extends MonitorOS {
         super.init();
 
         int widgetHeight = 20;
-        int waypointNameWidth = monitorWidth / 2;
+        int waypointNameWidth = MONITOR_WIDTH / 2;
         int waypointNameHeight = this.height / 2;
         int yPosition = height / 2;
         int xPosition = this.width / 2 - (waypointNameWidth / 2);
@@ -101,7 +101,7 @@ public class WaypointManageScreen extends MonitorOS {
             // Waypoint Stuff
             this.addWidget(waypointName);
 
-            int vPos = (height - monitorHeight) / 2;
+            int vPos = (height - MONITOR_HEIGHT) / 2;
             addCancelButton(width / 2 - 105, height - vPos - 25);
 
         }
@@ -115,8 +115,8 @@ public class WaypointManageScreen extends MonitorOS {
 
         onSaveWaypoint.active = !waypointName.getValue().isEmpty();
 
-        int headerHeight = height / 2 - monitorHeight / 3;
-        int starterCordHeight = height / 2 - monitorHeight / 3 + 7;
+        int headerHeight = height / 2 - MONITOR_HEIGHT / 3;
+        int starterCordHeight = height / 2 - MONITOR_HEIGHT / 3 + 7;
         int centerX = width / 2;
 
         String baseDirection = tardisNavLocation.getDirection().getName();

@@ -3,7 +3,6 @@ package whocraft.tardis_refined.client.screen.screens;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.StringReader;
-import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
@@ -44,11 +43,11 @@ public class DesktopSelectionScreen extends MonitorOS {
     protected void init() {
         super.init();
         this.setEvents(() -> DesktopSelectionScreen.selectDesktop(currentDesktopTheme), () -> {
-            if (PREVIOUS != null)
-                this.switchScreenToLeft(PREVIOUS);
+            if (previous != null)
+                this.switchScreenToLeft(previous);
         });
         this.currentDesktopTheme = grabDesktop();
-        int vPos = (height - monitorHeight) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
         addSubmitButton(width / 2 + 25, height - vPos - 25);
         addCancelButton(width / 2 + 5, height - vPos - 25);
     }
@@ -69,17 +68,17 @@ public class DesktopSelectionScreen extends MonitorOS {
     public void inMonitorRender(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
 
         PoseStack poseStack = guiGraphics.pose();
-        int hPos = (width - monitorWidth) / 2;
-        int vPos = (height - monitorHeight) / 2;
+        int hPos = (width - MONITOR_WIDTH) / 2;
+        int vPos = (height - MONITOR_HEIGHT) / 2;
 
         /*Render Interior Image*/
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        guiGraphics.blit(backdrop, 5 + width / 2, -50 + height / 2, 110, monitorHeight, 110, 95);
+        guiGraphics.blit(backdrop, 5 + width / 2, -50 + height / 2, 110, MONITOR_HEIGHT, 110, 95);
         poseStack.pushPose();
         int trim = 15;
         poseStack.translate(hPos + trim - 5, vPos + trim + 5, 0);
-        float scale = (monitorHeight - 2 * trim) / 400.0f;
-        guiGraphics.blit(backdrop, -5, -5, 0, monitorHeight, 110, 110);
+        float scale = (MONITOR_HEIGHT - 2 * trim) / 400.0f;
+        guiGraphics.blit(backdrop, -5, -5, 0, MONITOR_HEIGHT, 110, 110);
         poseStack.scale(scale, scale, scale);
         guiGraphics.blit(currentDesktopTheme.getPreviewTexture(), 0, 0, 0, 0, 400, 400, 400, 400);
 
@@ -100,8 +99,8 @@ public class DesktopSelectionScreen extends MonitorOS {
     @Override
     public ObjectSelectionList<SelectionListEntry> createSelectionList() {
         int leftPos = 5 + width / 2;
-        int topPos = (height - monitorHeight) / 2;
-        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 100, 80, leftPos, topPos + 15, topPos + monitorHeight - 30, 12);
+        int topPos = (height - MONITOR_HEIGHT) / 2;
+        GenericMonitorSelectionList<SelectionListEntry> selectionList = new GenericMonitorSelectionList<>(this.minecraft, 100, 80, leftPos, topPos + 15, topPos + MONITOR_HEIGHT - 30, 12);
         selectionList.setRenderBackground(false);
 
         Collection<DesktopTheme> values = TardisDesktops.getRegistry().values();
