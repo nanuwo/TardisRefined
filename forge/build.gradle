@@ -1,5 +1,7 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "me.shedaniel.unified-publishing" version "0.1.+"
+
 }
 architectury {
     platformSetupLoomIde()
@@ -79,7 +81,6 @@ dependencies {
 
 }
 
-if (System.getenv("curseforge") != null && System.getenv("modrinth") != null) {
     unifiedPublishing {
         project {
             displayName = "[NeoForge] Tardis Refined - $project.version"
@@ -118,7 +119,7 @@ if (System.getenv("curseforge") != null && System.getenv("modrinth") != null) {
             }
         }
     }
-}
+
 
 def resourceTargets = ["META-INF/mods.toml", "pack.mcmeta"]
 def intoTargets = ["$rootDir/out/production/resources/", "$rootDir/out/production/${project.name}.main/", "$rootDir/bin/main/"]
