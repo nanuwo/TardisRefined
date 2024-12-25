@@ -80,6 +80,10 @@ if (System.getenv("curseforge") != null && System.getenv("modrinth") != null) {
                     curseforge = "immersive-portals-mod"
                     modrinth = "immersiveportals"
                 }
+                optional {
+                    curseforge = "trinkets"
+                    modrinth = "trinkets"
+                }
             }
 
             var CURSE_API_KEY = project.findProperty("curseforge") ?: System.getenv("curseforge") ?: ""
