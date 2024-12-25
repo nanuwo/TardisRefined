@@ -13,7 +13,6 @@ public class ModMessages {
     public static final String UI_EXTERNAL_SHELL = ui("monitor.external_shell");
     public static final String UI_LIST_SELECTION = ui("monitor.list.selection");
     public static final String UI_DESKTOP_CONFIGURATION = ui("monitor.desktop");
-    public static final String UI_SHELL_SELECTION = ui("shell_selection");
     public static final String UI_MONITOR_GPS = ui("monitor.main.gps");
     public static final String UI_MONITOR_VORTEX = ui("monitor.main.vortex");
     public static final String UI_MONITOR_DESTINATION = ui("monitor.main.destination");
@@ -69,6 +68,9 @@ public class ModMessages {
     public static final String CMD_ARG_SHELL_INVALID = cmdArgInvalid("shell");
     public static final String KEYBIND_EXIT_VIEW = keybind("exit_exterior_view");
     public static final String KEYBIND_TOGGLE_INFO_EXTERIOR_VIEW = keybind("toggle_info_exterior_view");
+    public static final String VILLAGER_CAN_FLY = ui("villager_can_pilot");
+    public static final String DEMANDS_PAYMENT = message("demands_payment");
+    public static final String PILOT_TIME = message("pilot_time");
     public static String GITHUB_RELEASE_PAGE = "https://github.com/WhoCraft/TardisRefined/releases";
 
     /*Item Special cases*/

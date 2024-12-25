@@ -11,8 +11,8 @@ import net.neoforged.neoforge.common.data.LanguageProvider;
 import whocraft.tardis_refined.TardisRefined;
 import whocraft.tardis_refined.common.VortexRegistry;
 import whocraft.tardis_refined.common.capability.tardis.upgrades.Upgrade;
-import whocraft.tardis_refined.common.hum.HumEntry;
-import whocraft.tardis_refined.common.hum.TardisHums;
+import whocraft.tardis_refined.common.soundscape.hum.HumEntry;
+import whocraft.tardis_refined.common.soundscape.hum.TardisHums;
 import whocraft.tardis_refined.common.tardis.control.Control;
 import whocraft.tardis_refined.common.tardis.themes.ShellTheme;
 import whocraft.tardis_refined.constants.ModMessages;
@@ -186,6 +186,9 @@ public class LangProviderEnglish extends LanguageProvider {
         add(ModMessages.DOOR_UNLOCKED, "Door unlocked");
         add(ModMessages.RECOVERY_PROGRESS, "Recovery Progress: %s");
         add(ModMessages.SUBMIT, "Submit");
+        add(ModMessages.VILLAGER_CAN_FLY, "Pilot?");
+        add(ModMessages.PILOT_TIME, "You've still got %s with your pilot. Make the most of it!");
+        add(ModMessages.DEMANDS_PAYMENT, "Demands payment");
 
 
         /*Command*/
