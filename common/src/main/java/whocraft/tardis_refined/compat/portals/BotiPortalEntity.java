@@ -67,8 +67,10 @@ public class BotiPortalEntity extends Portal {
     public boolean isPortalValid() {
         UUID tardisId = getTardisId();
 
+
         if (level() instanceof ServerLevel serverLevel && tickCount > (20 * 40)) {
             PortalEntry portalEntry = ImmersivePortals.getPortalsForTardis(tardisId);
+
 
             if (portalEntry == null && this.tickCount > (2 * 20) && !this.getOriginWorld().isClientSide()) {
                 return false;
