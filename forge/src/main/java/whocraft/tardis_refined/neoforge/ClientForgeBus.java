@@ -40,15 +40,6 @@ public class ClientForgeBus {
 
     }
 
-    @SubscribeEvent(priority = EventPriority.NORMAL)
-    public static void onRenderOverlay(RegisterGuiOverlaysEvent event) {
-        event.registerAboveAll(new ResourceLocation(TardisRefined.MODID, "overlay"), new TardisRefinedOverlay());
-    }
 
-    @SubscribeEvent
-    public static void onRenderOverlay(RenderGuiOverlayEvent.Post guiOverlayEvent) {
-        GravityOverlay.renderOverlay(guiOverlayEvent.getGuiGraphics());
-        ExteriorViewOverlay.renderOverlay(guiOverlayEvent.getGuiGraphics());
-        VortexOverlay.renderOverlay(guiOverlayEvent.getGuiGraphics());
-    }
+
 }

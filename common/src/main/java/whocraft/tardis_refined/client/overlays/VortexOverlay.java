@@ -15,6 +15,7 @@ import whocraft.tardis_refined.client.renderer.vortex.VortexRenderer;
 import whocraft.tardis_refined.client.screen.screens.ShellSelectionScreen;
 import whocraft.tardis_refined.common.VortexRegistry;
 import whocraft.tardis_refined.common.capability.player.TardisPlayerInfo;
+import whocraft.tardis_refined.common.util.Platform;
 
 import static whocraft.tardis_refined.client.renderer.vortex.ShellRenderer.renderShell;
 import static whocraft.tardis_refined.client.screen.main.MonitorOS.MonitorOSExtension.GLOBALSHELL_BLOCKENTITY;
@@ -128,7 +129,8 @@ public class VortexOverlay {
             if (!tardisPlayerInfo.isRenderVortex()) return;
 
             VortexOverlay.update(gg);
-
+            DEMAT = 1;
+            IMMERSION = 1;
             float demat_transparency = Mth.cos(DEMAT * (Mth.PI) / (2f)) * (Mth.cos(16f * Mth.PI * DEMAT) * 0.5f + 0.5f) * (-DEMAT * 0.5f + 0.5f) - DEMAT * 0.5f + 0.5f;
 
             Camera camera = mc.gameRenderer.getMainCamera();
@@ -160,7 +162,7 @@ public class VortexOverlay {
 
             Matrix4f perspective = new Matrix4f();
             perspective.perspective((float) Math.toRadians(mc.options.fov().get()), width / height, 1, 9999, false, perspective);
-            perspective.translate(0, 0, 11000f - (float) camdist * mulinv - 5 * mul);
+            perspective.translate(0, 0, Platform.isForge() ? 9990f : 11000f - (float) camdist * mulinv - 5 * mul);
             RenderSystem.setProjectionMatrix(perspective, VertexSorting.DISTANCE_TO_ORIGIN);
 
             pose.pushPose();

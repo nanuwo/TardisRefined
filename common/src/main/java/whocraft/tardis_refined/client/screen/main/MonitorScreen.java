@@ -24,6 +24,7 @@ import whocraft.tardis_refined.common.VortexRegistry;
 import whocraft.tardis_refined.common.capability.tardis.upgrades.UpgradeHandler;
 import whocraft.tardis_refined.common.crafting.astral_manipulator.ManipulatorCraftingRecipe;
 import whocraft.tardis_refined.common.crafting.astral_manipulator.ManipulatorRecipes;
+import whocraft.tardis_refined.common.network.messages.C2SChangeShell;
 import whocraft.tardis_refined.common.network.messages.C2SEjectPlayer;
 import whocraft.tardis_refined.common.network.messages.player.C2SBeginShellView;
 import whocraft.tardis_refined.common.network.messages.screens.C2SRequestShellSelection;

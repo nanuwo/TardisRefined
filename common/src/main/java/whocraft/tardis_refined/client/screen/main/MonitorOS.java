@@ -33,6 +33,7 @@ import whocraft.tardis_refined.client.screen.screens.VortexSelectionScreen;
 import whocraft.tardis_refined.common.VortexRegistry;
 import whocraft.tardis_refined.common.blockentity.shell.GlobalShellBlockEntity;
 import whocraft.tardis_refined.common.tardis.themes.ShellTheme;
+import whocraft.tardis_refined.common.util.Platform;
 import whocraft.tardis_refined.patterns.ShellPattern;
 import whocraft.tardis_refined.patterns.ShellPatterns;
 import whocraft.tardis_refined.registry.TRBlockRegistry;
@@ -108,8 +109,8 @@ public class MonitorOS extends Screen {
         RenderSystem.backupProjectionMatrix();
         assert minecraft != null;
         Matrix4f perspective = new Matrix4f();
-        perspective.perspective((float) Math.toRadians(minecraft.options.fov().get()), (float) width / (float) height, 0.01f, 9999, false, perspective);
-        perspective.translate(0, 0, 11000f);
+        perspective.perspective((float) Math.toRadians(minecraft.options.fov().get()), (float) width / (float) height, 0, 9999, false, perspective);
+        perspective.translate(0, 0, Platform.isForge() ? 10000f : 11000f);
         RenderSystem.setProjectionMatrix(perspective, VertexSorting.DISTANCE_TO_ORIGIN);
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(20));
@@ -117,7 +118,6 @@ public class MonitorOS extends Screen {
         // Blindly assume that the player is not doing weird stuff to open the menu outside a TARDIS
         assert Minecraft.getInstance().level != null;
         TardisClientData tardisClientData = TardisClientData.getInstance(Minecraft.getInstance().level.dimension());
-
         VORTEX.vortexType = VortexRegistry.VORTEX_REGISTRY.get(this instanceof VortexSelectionScreen ? VortexSelectionScreen.currentVortex : tardisClientData.getVortex());
         VORTEX.time.speed = 0.3;
         VORTEX.renderVortex(guiGraphics, 1, false);
