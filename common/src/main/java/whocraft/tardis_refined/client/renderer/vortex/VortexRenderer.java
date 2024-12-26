@@ -23,7 +23,6 @@ import java.util.List;
  *
  * @author Edrax
  **/
-@Environment(EnvType.CLIENT)
 public class VortexRenderer {
 
     private static final RandomSource RAND = RandomSource.create();
