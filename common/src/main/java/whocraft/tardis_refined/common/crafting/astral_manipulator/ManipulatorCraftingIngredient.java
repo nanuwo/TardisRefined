@@ -19,8 +19,7 @@ public class ManipulatorCraftingIngredient {
     public static final Codec<ManipulatorCraftingIngredient> CODEC = RecordCodecBuilder.create(
             builder -> builder.group(
                             BlockPos.CODEC.fieldOf("relative_pos").forGetter(recipe -> recipe.relativeBlockPos),
-                            BlockState.CODEC.fieldOf("block_state").forGetter(recipe -> recipe.blockState),
-                            TagKey.codec(Registries.BLOCK).optionalFieldOf("block_tag").forGetter(recipe -> recipe.blockTagKey)
+                            BlockState.CODEC.fieldOf("block_state").forGetter(recipe -> recipe.blockState)
                     )
                     .apply(builder, ManipulatorCraftingIngredient::new)
     );
@@ -32,17 +31,12 @@ public class ManipulatorCraftingIngredient {
     private Optional<TagKey<Block>> blockTagKey;
 
     public ManipulatorCraftingIngredient(BlockPos pos, Block block) {
-        this(pos, block.defaultBlockState(), Optional.empty());
+        this(pos, block.defaultBlockState());
     }
 
     public ManipulatorCraftingIngredient(BlockPos pos, BlockState blockState) {
-        this(pos, blockState, Optional.empty());
-    }
-
-    public ManipulatorCraftingIngredient(BlockPos pos, BlockState blockState, Optional<TagKey<Block>> blockTagKey) {
         this.relativeBlockPos = pos;
         this.blockState = blockState;
-        this.blockTagKey = blockTagKey;
     }
 
     /**
@@ -52,8 +46,7 @@ public class ManipulatorCraftingIngredient {
      * @return If the items are equivalent.
      **/
     public boolean IsSameAs(ManipulatorCraftingIngredient compared) {
-        if (!compared.blockState.is(this.blockState.getBlock()) ||
-                blockTagKey.isPresent() && compared.blockState.is(blockTagKey.get())) {
+        if (!compared.blockState.is(this.blockState.getBlock())) {
             return false;
         }
         return this.relativeBlockPos.getX() == compared.relativeBlockPos.getX() &&

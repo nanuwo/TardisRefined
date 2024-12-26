@@ -3,22 +3,17 @@ package whocraft.tardis_refined.common.crafting.astral_manipulator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.SlabType;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.DirectionalBlock;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import whocraft.tardis_refined.TardisRefined;
 import whocraft.tardis_refined.registry.TRBlockRegistry;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Default recipes added by Tardis Refined. Used for data generators
@@ -42,13 +37,13 @@ public class ManipulatorRecipes {
                 new ManipulatorCraftingIngredient(new BlockPos(2, 0, 1), TRBlockRegistry.ZEITON_FUSED_IRON_BLOCK.get()),
                 new ManipulatorCraftingIngredient(new BlockPos(2, 0, 2), Blocks.SMOOTH_STONE_SLAB.defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP)),
                 new ManipulatorCraftingIngredient(new BlockPos(0, 1, 0), Blocks.IRON_TRAPDOOR),
-                new ManipulatorCraftingIngredient(new BlockPos(0, 1, 1), Blocks.STONE_BUTTON.defaultBlockState().setValue(ButtonBlock.FACE, AttachFace.FLOOR), Optional.of(BlockTags.BUTTONS)),
+                new ManipulatorCraftingIngredient(new BlockPos(0, 1, 1), Blocks.STONE_BUTTON.defaultBlockState().setValue(ButtonBlock.FACE, AttachFace.FLOOR)),
                 new ManipulatorCraftingIngredient(new BlockPos(0, 1, 2), Blocks.IRON_TRAPDOOR),
-                new ManipulatorCraftingIngredient(new BlockPos(1, 1, 0), Blocks.STONE_BUTTON.defaultBlockState().setValue(ButtonBlock.FACE, AttachFace.FLOOR), Optional.of(BlockTags.BUTTONS)),
+                new ManipulatorCraftingIngredient(new BlockPos(1, 1, 0), Blocks.STONE_BUTTON.defaultBlockState().setValue(ButtonBlock.FACE, AttachFace.FLOOR)),
                 new ManipulatorCraftingIngredient(new BlockPos(1, 1, 1), Blocks.GLASS),
-                new ManipulatorCraftingIngredient(new BlockPos(1, 1, 2), Blocks.STONE_BUTTON.defaultBlockState().setValue(ButtonBlock.FACE, AttachFace.FLOOR), Optional.of(BlockTags.BUTTONS)),
+                new ManipulatorCraftingIngredient(new BlockPos(1, 1, 2), Blocks.STONE_BUTTON.defaultBlockState().setValue(ButtonBlock.FACE, AttachFace.FLOOR)),
                 new ManipulatorCraftingIngredient(new BlockPos(2, 1, 0), Blocks.IRON_TRAPDOOR),
-                new ManipulatorCraftingIngredient(new BlockPos(2, 1, 1), Blocks.STONE_BUTTON.defaultBlockState().setValue(ButtonBlock.FACE, AttachFace.FLOOR), Optional.of(BlockTags.BUTTONS)),
+                new ManipulatorCraftingIngredient(new BlockPos(2, 1, 1), Blocks.STONE_BUTTON.defaultBlockState().setValue(ButtonBlock.FACE, AttachFace.FLOOR)),
                 new ManipulatorCraftingIngredient(new BlockPos(2, 1, 2), Blocks.IRON_TRAPDOOR)
 
         ), TRBlockRegistry.GLOBAL_CONSOLE_BLOCK.get().defaultBlockState()));
