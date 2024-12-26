@@ -80,6 +80,10 @@ public class MonitorOS extends Screen {
     public void renderBackground(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
     }
 
+    public ResourceLocation getPatternForRender(){
+        return null;
+    }
+
     public void render2Background(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         int hPos = (width - monitorWidth) / 2;
         int vPos = (height - monitorHeight) / 2;
@@ -327,17 +331,16 @@ public class MonitorOS extends Screen {
         protected void init() {
             super.init();
             if (CURRENTSHELLTHEME == null) CURRENTSHELLTHEME = THEMELIST.get(0);
-            if (PATTERN == null) PATTERN = PATTERNCOLLECTION.get(0);
         }
 
         public static GlobalShellBlockEntity GLOBALSHELL_BLOCKENTITY;
         public static ResourceLocation CURRENTSHELLTHEME;
-        public static ShellPattern PATTERN;
         public static List<ResourceLocation> THEMELIST;
         public static List<ShellPattern> PATTERNCOLLECTION;
 
         public void renderShell(GuiGraphics guiGraphics, int x, int y, float scale) {
-            ShellModel model = ShellModelCollection.getInstance().getShellEntry(CURRENTSHELLTHEME).getShellModel(PATTERN);
+            ShellPattern pattern = ShellPatterns.getPatternOrDefault(CURRENTSHELLTHEME, getPatternForRender());
+            ShellModel model = ShellModelCollection.getInstance().getShellEntry(CURRENTSHELLTHEME).getShellModel(pattern);
             model.setDoorPosition(false);
             Lighting.setupForEntityInInventory();
             PoseStack pose = guiGraphics.pose();
@@ -347,7 +350,7 @@ public class MonitorOS extends Screen {
             pose.mulPose(Axis.XP.rotationDegrees(-15F));
             pose.mulPose(Axis.YP.rotationDegrees((float) (System.currentTimeMillis() % 5400L) / 15L));
 
-            VertexConsumer vertexConsumer = guiGraphics.bufferSource().getBuffer(model.renderType(model.getShellTexture(PATTERN, false)));
+            VertexConsumer vertexConsumer = guiGraphics.bufferSource().getBuffer(model.renderType(model.getShellTexture(pattern, false)));
             model.renderShell(GLOBALSHELL_BLOCKENTITY, false, false, pose, vertexConsumer, 15728880, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
             guiGraphics.flush();
             pose.popPose();

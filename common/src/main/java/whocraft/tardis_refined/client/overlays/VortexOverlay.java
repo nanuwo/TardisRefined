@@ -129,8 +129,7 @@ public class VortexOverlay {
             if (!tardisPlayerInfo.isRenderVortex()) return;
 
             VortexOverlay.update(gg);
-            DEMAT = 1;
-            IMMERSION = 1;
+
             float demat_transparency = Mth.cos(DEMAT * (Mth.PI) / (2f)) * (Mth.cos(16f * Mth.PI * DEMAT) * 0.5f + 0.5f) * (-DEMAT * 0.5f + 0.5f) - DEMAT * 0.5f + 0.5f;
 
             Camera camera = mc.gameRenderer.getMainCamera();
@@ -168,6 +167,7 @@ public class VortexOverlay {
             pose.pushPose();
             pose.mulPose(Axis.XP.rotationDegrees(xRot));
             pose.mulPose(Axis.YP.rotationDegrees(YROT * mulinv));
+
             //Vortex
             pose.pushPose();
             pose.scale(100, 100, 100);
@@ -181,7 +181,6 @@ public class VortexOverlay {
             pose.mulPose(Axis.ZP.rotationDegrees(mul * VORTEX.lightning_strike * 90 * Mth.sin(VORTEX.lightning_strike)));
 
             pose.pushPose();
-            pose.scale(0.95f, 0.95f, 0.95f);
             renderShell(gg, IMMERSION, 1 - demat_transparency, tardisClientData.getThrottleStage());
             pose.popPose();
 
