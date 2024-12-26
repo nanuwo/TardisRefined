@@ -15,6 +15,7 @@ import whocraft.tardis_refined.client.renderer.vortex.VortexRenderer;
 import whocraft.tardis_refined.client.screen.screens.ShellSelectionScreen;
 import whocraft.tardis_refined.common.VortexRegistry;
 import whocraft.tardis_refined.common.capability.player.TardisPlayerInfo;
+import whocraft.tardis_refined.common.util.Platform;
 
 import static whocraft.tardis_refined.client.renderer.vortex.ShellRenderer.renderShell;
 import static whocraft.tardis_refined.client.screen.main.MonitorOS.MonitorOSExtension.GLOBALSHELL_BLOCKENTITY;
@@ -160,12 +161,13 @@ public class VortexOverlay {
 
             Matrix4f perspective = new Matrix4f();
             perspective.perspective((float) Math.toRadians(mc.options.fov().get()), width / height, 1, 9999, false, perspective);
-            perspective.translate(0, 0, 11000f - (float) camdist * mulinv - 5 * mul);
+            perspective.translate(0, 0, Platform.isForge() ? 9990f : 11000f - (float) camdist * mulinv - 5 * mul);
             RenderSystem.setProjectionMatrix(perspective, VertexSorting.DISTANCE_TO_ORIGIN);
 
             pose.pushPose();
             pose.mulPose(Axis.XP.rotationDegrees(xRot));
             pose.mulPose(Axis.YP.rotationDegrees(YROT * mulinv));
+
             //Vortex
             pose.pushPose();
             pose.scale(100, 100, 100);
@@ -179,7 +181,6 @@ public class VortexOverlay {
             pose.mulPose(Axis.ZP.rotationDegrees(mul * VORTEX.lightning_strike * 90 * Mth.sin(VORTEX.lightning_strike)));
 
             pose.pushPose();
-            pose.scale(0.95f, 0.95f, 0.95f);
             renderShell(gg, IMMERSION, 1 - demat_transparency, tardisClientData.getThrottleStage());
             pose.popPose();
 

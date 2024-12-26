@@ -12,6 +12,7 @@ import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.world.item.Item;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -37,6 +38,7 @@ import whocraft.tardis_refined.client.renderer.blockentity.shell.RootShellRender
 import whocraft.tardis_refined.client.renderer.entity.ControlEntityRenderer;
 import whocraft.tardis_refined.common.items.DimensionSamplerItem;
 import whocraft.tardis_refined.mixin.forge.ReloadableResourceManagerMixin;
+import whocraft.tardis_refined.overlays.TardisRefinedOverlay;
 import whocraft.tardis_refined.registry.RegistrySupplier;
 import whocraft.tardis_refined.registry.TRBlockEntityRegistry;
 import whocraft.tardis_refined.registry.TREntityRegistry;
@@ -121,5 +123,9 @@ public class ClientModBus {
 
     }
 
+    @SubscribeEvent(priority = EventPriority.NORMAL)
+    public static void onRenderOverlay(RegisterGuiOverlaysEvent event) {
+        event.registerAboveAll(new ResourceLocation(TardisRefined.MODID, "overlay"), new TardisRefinedOverlay());
+    }
 
 }
