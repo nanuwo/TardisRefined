@@ -838,6 +838,7 @@ public class TardisPilotingManager extends TickableHandler {
         return this.targetLocation;
     }
 
+
     public void setTargetLocation(TardisNavLocation targetLocation) {
         this.targetLocation = targetLocation.copy();
     }
@@ -859,6 +860,10 @@ public class TardisPilotingManager extends TickableHandler {
 
     public void setTargetPosition(BlockPos pos) {
         this.targetLocation.setPosition(pos);
+    }
+
+    public void setTargetDimension(ServerLevel serverLevel) {
+        this.targetLocation.setLevel(serverLevel);
     }
 
     public int getCordIncrement() {
