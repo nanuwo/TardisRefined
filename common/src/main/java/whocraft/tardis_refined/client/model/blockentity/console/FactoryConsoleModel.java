@@ -52,12 +52,12 @@ public class FactoryConsoleModel extends HierarchicalModel implements ConsoleUni
         root().getAllParts().forEach(ModelPart::resetPose);
         TardisClientData reactions = TardisClientData.getInstance(level.dimension());
         if (globalConsoleBlock == null) return;
+        if (globalConsoleBlock.getBlockState() == null) return;
 
         Boolean powered = globalConsoleBlock.getBlockState() == null ? true : globalConsoleBlock.getBlockState().getValue(GlobalConsoleBlock.POWERED);
 
 
         if (powered) {
-
             if (!globalConsoleBlock.powerOn.isStarted()) {
                 globalConsoleBlock.powerOff.stop();
                 globalConsoleBlock.powerOn.start(Minecraft.getInstance().player.tickCount);
@@ -92,8 +92,8 @@ public class FactoryConsoleModel extends HierarchicalModel implements ConsoleUni
 
         this.handbrake.xRot = reactions.isHandbrakeEngaged() ? -155f : -125f;
         root().render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-
     }
+
 
 
     @Override

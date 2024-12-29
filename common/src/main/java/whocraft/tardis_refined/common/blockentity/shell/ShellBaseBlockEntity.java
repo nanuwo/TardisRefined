@@ -30,6 +30,7 @@ import whocraft.tardis_refined.registry.TRUpgrades;
 import whocraft.tardis_refined.common.dimension.DimensionHandler;
 import whocraft.tardis_refined.common.tardis.TardisDesktops;
 import whocraft.tardis_refined.common.tardis.TardisNavLocation;
+import whocraft.tardis_refined.common.tardis.manager.AestheticHandler;
 import whocraft.tardis_refined.common.tardis.manager.TardisPilotingManager;
 import whocraft.tardis_refined.common.tardis.themes.DesktopTheme;
 import whocraft.tardis_refined.common.util.Platform;
@@ -113,10 +114,11 @@ public abstract class ShellBaseBlockEntity extends BlockEntity implements Exteri
             TardisLevelOperator.get(interior).ifPresent(cap -> {
 
                 UpgradeHandler upgradeHandler = cap.getUpgradeHandler();
+                AestheticHandler aesthetics = cap.getAestheticHandler();
 
                 if (cap.isTardisReady() && (blockState.getValue(ShellBaseBlock.OPEN) || (cap.getPilotingManager().isLanding() && TRUpgrades.MATERIALIZE_AROUND.get().isUnlocked(upgradeHandler)))) {
-                    if (cap.getAestheticHandler().getShellTheme() != null) {
-                        ResourceLocation theme = cap.getAestheticHandler().getShellTheme();
+                    if (aesthetics.getShellTheme() != null) {
+                        ResourceLocation theme = aesthetics.getShellTheme();
 
                         if (ModCompatChecker.immersivePortals()) {
                             if (ImmersivePortals.isShellThemeSupported(theme) && ImmersivePortals.doPortalsExistForTardis(UUID.fromString(TARDIS_ID.location().getPath()))) {

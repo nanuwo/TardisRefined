@@ -926,8 +926,11 @@ public class VictorianConsoleModel extends HierarchicalModel implements ConsoleU
     public void renderConsole(GlobalConsoleBlockEntity globalConsoleBlock, Level level, PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         root().getAllParts().forEach(ModelPart::resetPose);
         TardisClientData reactions = TardisClientData.getInstance(level.dimension());
+        if (globalConsoleBlock == null) return;
+        if (globalConsoleBlock.getBlockState() == null) return;
 
         Boolean powered = globalConsoleBlock.getBlockState() == null ? true : globalConsoleBlock.getBlockState().getValue(GlobalConsoleBlock.POWERED);
+
 
         if (powered) {
             if (!globalConsoleBlock.powerOn.isStarted()) {
@@ -948,6 +951,7 @@ public class VictorianConsoleModel extends HierarchicalModel implements ConsoleU
                     this.animate(globalConsoleBlock.liveliness, IDLE, Minecraft.getInstance().player.tickCount);
                 }
             }
+
         } else {
             if (globalConsoleBlock != null) {
                 if (!globalConsoleBlock.powerOff.isStarted()) {
@@ -958,11 +962,13 @@ public class VictorianConsoleModel extends HierarchicalModel implements ConsoleU
             }
         }
 
+
         float rot = 1f + (2 * ((float) reactions.getThrottleStage() / TardisPilotingManager.MAX_THROTTLE_STAGE));
         throttle_control.yRot = rot;
 
         root().render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
+
 
     @Override
     public ResourceLocation getDefaultTexture() {

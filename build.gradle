@@ -55,7 +55,7 @@ githubRelease {
     owner "WhoCraft"
     repo "TardisRefined"
     tagName "v$rootProject.minecraft_version-$project.mod_version"
-    targetCommitish "mc/1.20.1"
+    targetCommitish "mc/1.20.2"
     releaseName "[$rootProject.minecraft_version] Tardis Refined - v$project.mod_version"
     generateReleaseNotes true
     body new File("${rootProject.projectDir}/changelog.md").text
