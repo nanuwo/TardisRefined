@@ -19,15 +19,9 @@ import org.joml.Matrix4f;
 import org.joml.Random;
 import whocraft.tardis_refined.TardisRefined;
 import whocraft.tardis_refined.client.ModelRegistry;
-import whocraft.tardis_refined.client.model.blockentity.device.ArtronPillarBlockModel;
-import whocraft.tardis_refined.client.model.blockentity.door.interior.BulkHeadDoorModel;
-import whocraft.tardis_refined.client.model.blockentity.life.ArsEggModel;
-import whocraft.tardis_refined.client.renderer.RenderHelper;
 import whocraft.tardis_refined.client.model.GenericModel;
 import whocraft.tardis_refined.common.block.device.ArtronPillarBlock;
-import whocraft.tardis_refined.common.block.door.GlobalDoorBlock;
 import whocraft.tardis_refined.common.blockentity.device.ArtronPillarBlockEntity;
-import whocraft.tardis_refined.common.blockentity.door.GlobalDoorBlockEntity;
 
 public class ArtronPillarRenderer implements BlockEntityRenderer<ArtronPillarBlockEntity>, BlockEntityRendererProvider<ArtronPillarBlockEntity> {
 
