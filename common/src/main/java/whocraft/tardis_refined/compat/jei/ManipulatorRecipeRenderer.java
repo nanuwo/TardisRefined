@@ -103,10 +103,10 @@ public class ManipulatorRecipeRenderer {
 
         this.addLayersButton.active = (this.currentLayers < this.maxLayers);
         this.addLayersButton.render(guiGraphics, (int) mouseX, (int) mouseY, this.minecraft.getFrameTime());
-        Component visibleLayersString = Component.translatable(ModMessages.UI_JEI_VISIBLE_RECIPE_LAYERS, this.maxLayers + 1);
+        Component visibleLayersString = Component.translatable(ModMessages.UI_VISIBLE_RECIPE_LAYERS, this.maxLayers + 1);
         guiGraphics.drawString(this.minecraft.font, visibleLayersString,
                 this.width - this.minecraft.font.width(visibleLayersString), this.height - 5, 0xFFFFFF);
-        this.removeLayersButton.active = (this.currentLayers > 0);
+        this.removeLayersButton.active = this.currentLayers > 0;
         this.removeLayersButton.render(guiGraphics, (int) mouseX, (int) mouseY, this.minecraft.getFrameTime());
     }
 
@@ -120,6 +120,7 @@ public class ManipulatorRecipeRenderer {
         if (mouseX < this.xOffset || mouseX > this.width || mouseY < this.yOffset || mouseY > this.height) {
             return false;
         }
+
         if (this.addLayersButton.mouseClicked(mouseX, mouseY, input.getValue())) {
             this.currentLayers = Math.min(this.currentLayers + 1, this.maxLayers);
             return true;

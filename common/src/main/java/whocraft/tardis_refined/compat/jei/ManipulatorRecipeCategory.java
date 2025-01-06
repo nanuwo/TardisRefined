@@ -90,6 +90,7 @@ public class ManipulatorRecipeCategory implements IRecipeCategory<ManipulatorCra
     public void draw(ManipulatorCraftingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         if (this.recipeRenderer == null) return;
         this.recipeRenderer.draw(guiGraphics, mouseX, mouseY);
+
     }
 
     @Override
