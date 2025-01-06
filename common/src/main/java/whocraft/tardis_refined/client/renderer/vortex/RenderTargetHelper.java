@@ -19,15 +19,23 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.opengl.GL11;
+import whocraft.tardis_refined.TRConfig;
+import whocraft.tardis_refined.TardisRefined;
 import whocraft.tardis_refined.client.TardisClientData;
 import whocraft.tardis_refined.client.model.blockentity.door.interior.ShellDoorModel;
 import whocraft.tardis_refined.client.model.blockentity.shell.ShellModelCollection;
 import whocraft.tardis_refined.common.VortexRegistry;
 import whocraft.tardis_refined.common.block.door.InternalDoorBlock;
 import whocraft.tardis_refined.common.blockentity.door.GlobalDoorBlockEntity;
+import whocraft.tardis_refined.compat.ModCompatChecker;
+import whocraft.tardis_refined.compat.portals.ImmersivePortals;
+import whocraft.tardis_refined.compat.portals.ImmersivePortalsClient;
 
 import java.util.SortedMap;
 
@@ -41,20 +49,20 @@ public class RenderTargetHelper {
     private static final RenderTargetHelper RENDER_TARGET_HELPER = new RenderTargetHelper();
     public static StencilBufferStorage stencilBufferStorage = new StencilBufferStorage();
 
+    public static Logger LOGGER = LogManager.getLogger("TardisRefinbed/StencilRendering");
+
     public static void renderVortex(GlobalDoorBlockEntity blockEntity, float partialTick, PoseStack stack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
 
         BlockState blockstate = blockEntity.getBlockState();
         ResourceLocation theme = blockEntity.theme();
-
         float rotation = blockstate.getValue(InternalDoorBlock.FACING).toYRot();
         boolean isOpen = blockstate.getValue(InternalDoorBlock.OPEN);
         ShellDoorModel currentModel = ShellModelCollection.getInstance().getShellEntry(theme).getShellDoorModel(blockEntity.pattern());
         TardisClientData tardisClientData = TardisClientData.getInstance(blockEntity.getLevel().dimension());
 
-
         VORTEX.vortexType = VortexRegistry.VORTEX_DEFERRED_REGISTRY.get(tardisClientData.getVortex());
 
-        if (tardisClientData.isFlying() && isOpen) {
+        if (tardisClientData.isFlying() && !TRConfig.CLIENT.SKIP_FANCY_RENDERING.get()) {
             renderDoorOpen(blockEntity, stack, packedLight, rotation, currentModel, isOpen, tardisClientData);
         } else {
             renderNoVortex(blockEntity, stack, bufferSource, packedLight, rotation, currentModel, isOpen);
@@ -67,7 +75,14 @@ public class RenderTargetHelper {
         GlStateManager._glBlitFrameBuffer(0, 0, src.width, src.height, 0, 0, dest.width, dest.height, GlConst.GL_DEPTH_BUFFER_BIT | GlConst.GL_COLOR_BUFFER_BIT, GlConst.GL_NEAREST);
     }
 
+    private static ResourceLocation BLACK = new ResourceLocation(TardisRefined.MODID, "textures/black_portal.png");
+
     private static void renderDoorOpen(GlobalDoorBlockEntity blockEntity, PoseStack stack, int packedLight, float rotation, ShellDoorModel currentModel, boolean isOpen, TardisClientData tardisClientData) {
+        if (ModCompatChecker.immersivePortals()) {
+            if (ImmersivePortalsClient.shouldStopRenderingInPortal()) {
+                return;
+            }
+        }
         stack.pushPose();
 
         // Fix transform
@@ -76,19 +91,27 @@ public class RenderTargetHelper {
         stack.mulPose(Axis.YP.rotationDegrees(rotation));
         stack.translate(0, 0, -0.01);
 
+        RenderSystem.depthMask(true);
+
         // Unbind RenderTarget
         Minecraft.getInstance().getMainRenderTarget().unbindWrite();
         RENDER_TARGET_HELPER.start();
+        if (!getIsStencilEnabled(RENDER_TARGET_HELPER.renderTarget)) {
+            setIsStencilEnabled(RENDER_TARGET_HELPER.renderTarget, true);
+        }
+
         copyRenderTarget(Minecraft.getInstance().getMainRenderTarget(), RENDER_TARGET_HELPER.renderTarget);
 
         // Render Door Frame
         MultiBufferSource.BufferSource imBuffer = stencilBufferStorage.getVertexConsumer();
         currentModel.setDoorPosition(isOpen);
-        currentModel.renderFrame(blockEntity, isOpen, true, stack, imBuffer.getBuffer(RenderType.entityTranslucent(currentModel.getInteriorDoorTexture(blockEntity))), packedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
+        currentModel.renderFrame(blockEntity, isOpen, true, stack, imBuffer.getBuffer(RenderType.entityCutout(currentModel.getInteriorDoorTexture(blockEntity))), packedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
         imBuffer.endBatch();
 
         // Enable and configure stencil buffer
         GL11.glEnable(GL11.GL_STENCIL_TEST);
+        checkGLError("Enabling stencil test");
+
         GL11.glStencilMask(0xFF); // Ensure stencil mask is set before clearing
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT); // Clear stencil buffer
         GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
@@ -97,7 +120,7 @@ public class RenderTargetHelper {
         // Render portal mask with depth writing enabled
         RenderSystem.depthMask(true);
         stack.pushPose();
-        currentModel.renderPortalMask(blockEntity, isOpen, true, stack, imBuffer.getBuffer(RenderType.entityTranslucent(currentModel.getInteriorDoorTexture(blockEntity))), packedLight, OverlayTexture.NO_OVERLAY, 0f, 0f, 0f, 1f);
+        currentModel.renderPortalMask(blockEntity, isOpen, true, stack, imBuffer.getBuffer(RenderType.entityTranslucentCull(BLACK)), packedLight, OverlayTexture.NO_OVERLAY, 0f, 0f, 0f, 1f);
         imBuffer.endBatch();
         stack.popPose();
         RenderSystem.depthMask(false); // Disable depth writing for subsequent rendering
@@ -110,20 +133,39 @@ public class RenderTargetHelper {
         GL11.glColorMask(true, true, true, false);
         stack.pushPose();
         stack.scale(10, 10, 10);
+
         VORTEX.time.speed = (0.3f + tardisClientData.getThrottleStage() * 0.1f);
         VORTEX.renderVortex(stack, 1, false);
         stack.popPose();
+
         GlStateManager._depthFunc(GL11.GL_LEQUAL); // Restore depth function
         GL11.glColorMask(false, false, false, true);
 
         // Copy render target back to main buffer
-        RENDER_TARGET_HELPER.end();
         Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
         copyRenderTarget(RENDER_TARGET_HELPER.renderTarget, Minecraft.getInstance().getMainRenderTarget());
-        GL11.glDisable(GL11.GL_STENCIL_TEST); // Disable stencil test
+
+        if (getIsStencilEnabled(RENDER_TARGET_HELPER.renderTarget)) {
+            setIsStencilEnabled(RENDER_TARGET_HELPER.renderTarget, false);
+        }
+
+        Minecraft.getInstance().getMainRenderTarget().bindWrite(true);
+
+        // Disable stencil test and restore state
+        GL11.glDisable(GL11.GL_STENCIL_TEST);
+        GL11.glStencilMask(0xFF);
         GL11.glColorMask(true, true, true, true);
+        RenderSystem.depthMask(true);
 
         stack.popPose();
+    }
+
+    public static void checkGLError(String msg) {
+        int error;
+        while ((error = GL11.glGetError()) != GL11.GL_NO_ERROR) {
+            LOGGER.debug("{}: {}", msg, error);
+        }
+
     }
 
     private static void renderNoVortex(GlobalDoorBlockEntity blockEntity, PoseStack stack, MultiBufferSource bufferSource, int packedLight, float rotation, ShellDoorModel currentModel, boolean isOpen) {
@@ -135,12 +177,21 @@ public class RenderTargetHelper {
             stack.mulPose(Axis.YP.rotationDegrees(rotation));
             stack.translate(0, 0, -0.01);
         }
-
+        currentModel.setDoorPosition(isOpen);
         currentModel.renderFrame(blockEntity, isOpen, true, stack, bufferSource.getBuffer(RenderType.entityTranslucent(currentModel.getInteriorDoorTexture(blockEntity))), packedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
         currentModel.renderPortalMask(blockEntity, isOpen, true, stack, bufferSource.getBuffer(RenderType.entityTranslucent(currentModel.getInteriorDoorTexture(blockEntity))), packedLight, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
         stack.popPose();
     }
 
+    @Environment(EnvType.CLIENT)
+    public static boolean getIsStencilEnabled(RenderTarget renderTarget) {
+        return ((RenderTargetStencil) renderTarget).tr$getisStencilEnabled();
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static void setIsStencilEnabled(RenderTarget renderTarget, boolean cond) {
+        ((RenderTargetStencil) renderTarget).tr$setisStencilEnabledAndReload(cond);
+    }
 
     public void start() {
         Window window = Minecraft.getInstance().getWindow();
@@ -157,40 +208,31 @@ public class RenderTargetHelper {
     }
 
 
-    public void end() {
-        renderTarget.clear(Minecraft.ON_OSX);
+    public void end(boolean clear) {
+        renderTarget.clear(clear);
         renderTarget.unbindWrite();
-    }
-
-
-    @Environment(EnvType.CLIENT)
-    public static boolean getIsStencilEnabled(RenderTarget renderTarget) {
-        return ((RenderTargetStencil) renderTarget).tr$getisStencilEnabled();
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static void setIsStencilEnabled(RenderTarget renderTarget, boolean cond) {
-        ((RenderTargetStencil) renderTarget).tr$setisStencilEnabledAndReload(cond);
     }
 
 
     @Environment(value = EnvType.CLIENT)
     public static class StencilBufferStorage extends RenderBuffers {
 
-        private final SortedMap<RenderType, BufferBuilder> typeBufferBuilder = Util.make(new Object2ObjectLinkedOpenHashMap(), map -> {
+        private static final TextureStateShard BLOCK_SHEET_MIPPED_BUTMINE = new TextureStateShard(TextureAtlas.LOCATION_BLOCKS, false, true);
+
+
+        private final Object2ObjectLinkedOpenHashMap typeBufferBuilder = Util.make(new Object2ObjectLinkedOpenHashMap(), map -> {
             put(map, getConsumer());
         });
+        private final MultiBufferSource.BufferSource consumer = MultiBufferSource.immediateWithBuffers(typeBufferBuilder, new BufferBuilder(256));
 
         public static RenderType getConsumer() {
             RenderType.CompositeState parameters = RenderType.CompositeState.builder()
-                    .setTextureState(BLOCK_SHEET_MIPPED)
+                    .setTextureState(BLOCK_SHEET_MIPPED_BUTMINE)
                     .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
                     .setLayeringState(NO_LAYERING).createCompositeState(false);
             return RenderType.create("vortex", DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP,
                     QUADS, 256, false, true, parameters);
         }
-
-        private final MultiBufferSource.BufferSource consumer = MultiBufferSource.immediateWithBuffers(typeBufferBuilder, new BufferBuilder(256));
 
         private static void put(Object2ObjectLinkedOpenHashMap<RenderType, BufferBuilder> builderStorage, RenderType layer) {
             builderStorage.put(layer, new BufferBuilder(layer.bufferSize()));

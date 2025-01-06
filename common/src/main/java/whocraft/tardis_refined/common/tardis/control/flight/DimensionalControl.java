@@ -19,6 +19,7 @@ import whocraft.tardis_refined.constants.ModMessages;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static net.minecraft.world.level.Level.OVERWORLD;
 
@@ -33,7 +34,9 @@ public class DimensionalControl extends Control {
 
     private List<ServerLevel> getAllowedDimensions(TardisLevelOperator tardisLevelOperator) {
         var filteredDimensions = new ArrayList<ServerLevel>();
+
         var filteredLevels = Platform.getServer().getAllLevels();
+
 
         filteredLevels.forEach(x -> {
             if (tardisLevelOperator.getProgressionManager().isLevelDiscovered(x.dimension())) {
@@ -41,7 +44,7 @@ public class DimensionalControl extends Control {
             }
         });
 
-        return filteredDimensions;
+        return filteredDimensions.stream().filter(serverLevel -> DimensionUtil.isAllowedDimension(serverLevel.dimension())).toList();
     }
 
     @Override
@@ -66,9 +69,9 @@ public class DimensionalControl extends Control {
                 return false;
             }
 
-            var dimensions = getAllowedDimensions(operator);
-            var currentIndex = dimensions.indexOf(pilotManager.getTargetLocation().getLevel());
-            var nextIndex = forward ? ((currentIndex >= dimensions.size() - 1) ? 0 : currentIndex + 1) : ((currentIndex <= 0) ? dimensions.size() - 1 : currentIndex - 1);
+            List<ServerLevel> dimensions = getAllowedDimensions(operator);
+            int currentIndex = dimensions.indexOf(pilotManager.getTargetLocation().getLevel());
+            int nextIndex = forward ? ((currentIndex >= dimensions.size() - 1) ? 0 : currentIndex + 1) : ((currentIndex <= 0) ? dimensions.size() - 1 : currentIndex - 1);
 
             if(dimensions.isEmpty()){
                 return false;
@@ -84,7 +87,7 @@ public class DimensionalControl extends Control {
                 }
             }
 
-            pilotManager.getTargetLocation().setLevel(dimensions.get(nextIndex));
+            pilotManager.setTargetDimension(dimensions.get(nextIndex));
 
             PlayerUtil.sendMessage(player, Component.translatable(ModMessages.CONTROL_DIMENSION_SELECTED, MiscHelper.getCleanDimensionName(pilotManager.getTargetLocation().getDimensionKey())), true);
 

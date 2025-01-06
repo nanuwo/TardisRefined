@@ -7,19 +7,19 @@
     "EndDragonFightAccessor",
     "MappedRegistryAccessor",
     "MinecraftServerStorageAccessor",
+    "PistonBaseBlockMixin",
     "PlayerEntityMixin",
     "VillagerGoalPackagesMixin",
     "VillagerMixin"
   ],
   "client": [
-    "render.FogRendererMixin",
-    "render.ui.GuiMixin",
     "LocalPlayerMixin",
     "MultiplayerGameModeMixin",
+    "render.FogRendererMixin",
     "render.PlayerRenderMixin",
-    "render.ui.SpectatorGuiMixin",
-    "render.buffer.MixinMainTarget",
-    "render.buffer.MixinRenderTarget"
+    "render.buffer.MixinRenderTarget",
+    "render.ui.GuiMixin",
+    "render.ui.SpectatorGuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1

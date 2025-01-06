@@ -1,11 +1,15 @@
 package whocraft.tardis_refined.patterns;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import whocraft.tardis_refined.TardisRefined;
 import whocraft.tardis_refined.common.tardis.themes.ConsoleTheme;
 import whocraft.tardis_refined.common.tardis.themes.ShellTheme;
-import whocraft.tardis_refined.common.util.Platform;
 import whocraft.tardis_refined.constants.ResourceConstants;
+import whocraft.tardis_refined.patterns.sound.ConfiguredSound;
 import whocraft.tardis_refined.patterns.sound.ShellSoundProfile;
 import whocraft.tardis_refined.patterns.sound.TRShellSoundProfiles;
 
@@ -15,10 +19,14 @@ import java.util.*;
  * Data Manager for all {@link ShellPattern}(s)
  */
 public class ShellPatterns {
+
+    public static Logger LOGGER = LogManager.getLogger("TardisRefined/ShellPatterns");
+
+
     public static final ShellPattern DEFAULT = (ShellPattern) new ShellPattern(ResourceConstants.DEFAULT_PATTERN_ID, new PatternTexture(exteriorTextureLocation(ShellTheme.FACTORY.getId(), ShellTheme.FACTORY.getId().getPath()), false)
             , new PatternTexture(interiorTextureLocation(ShellTheme.FACTORY.getId(), ShellTheme.FACTORY.getId().getPath()), false), Optional.of(TRShellSoundProfiles.DEFAULT_SOUND_PROFILE)).setThemeId(ConsoleTheme.FACTORY.getId());
     public static PatternReloadListener<ShellPatternCollection, ShellPattern> PATTERNS = PatternReloadListener.createListener(TardisRefined.MODID + "/patterns/shell", ShellPatternCollection.CODEC, patternCollections -> PatternReloadListener.processPatternCollections(patternCollections));
-    private static Map<ResourceLocation, List<ShellPattern>> DEFAULT_PATTERNS = new HashMap();
+    private static final Map<ResourceLocation, List<ShellPattern>> DEFAULT_PATTERNS = new HashMap<>();
 
     public static PatternReloadListener<ShellPatternCollection, ShellPattern> getReloadListener() {
         return PATTERNS;
@@ -126,16 +134,14 @@ public class ShellPatterns {
         ShellPattern pattern = (ShellPattern) datagenPattern.setThemeId(themeId);
         if (DEFAULT_PATTERNS.containsKey(themeId)) {
             patternList = DEFAULT_PATTERNS.get(themeId);
-            List<ShellPattern> currentList = new ArrayList<>();
-            currentList.addAll(patternList);
+            List<ShellPattern> currentList = new ArrayList<>(patternList);
             currentList.add(pattern);
             DEFAULT_PATTERNS.replace(themeId, currentList);
+            LOGGER.info("Adding Shell Pattern {} for {}", pattern.id(), themeId);
         } else {
             patternList = List.of(pattern);
             DEFAULT_PATTERNS.put(themeId, patternList);
         }
-        if (!Platform.isProduction()) //Enable Logging in development environment
-            TardisRefined.LOGGER.info("Adding Shell Pattern {} for {}", pattern.id(), themeId);
         return pattern;
     }
 
@@ -177,7 +183,7 @@ public class ShellPatterns {
 
     public static Map<ResourceLocation, ShellPatternCollection> getDefaultPatternsDatagen() {
         Map<ResourceLocation, ShellPatternCollection> defaults = new HashMap<>();
-        DEFAULT_PATTERNS.entrySet().forEach(entry -> defaults.put(entry.getKey(), (ShellPatternCollection) new ShellPatternCollection(entry.getValue()).setThemeId(entry.getKey())));
+        DEFAULT_PATTERNS.forEach((key, value) -> defaults.put(key, (ShellPatternCollection) new ShellPatternCollection(value).setThemeId(key)));
         return defaults;
     }
 
@@ -189,6 +195,9 @@ public class ShellPatterns {
         DEFAULT_PATTERNS.clear();
         /*Add Base Textures*/
         for (ResourceLocation shellTheme : ShellTheme.SHELL_THEME_REGISTRY.keySet()) {
+            if(shellTheme == ShellTheme.SHULKER.getId()){
+                continue;
+            }
             boolean hasDefaultEmission = shellTheme == ShellTheme.MYSTIC.getId() || shellTheme == ShellTheme.NUKA.getId() || shellTheme == ShellTheme.PAGODA.getId() || shellTheme == ShellTheme.PHONE_BOOTH.getId() || shellTheme == ShellTheme.POLICE_BOX.getId() || shellTheme == ShellTheme.VENDING.getId();
             String textureName = shellTheme.getPath();
             ShellSoundProfile soundProfile = TRShellSoundProfiles.defaultSoundProfilesByTheme().getOrDefault(shellTheme, TRShellSoundProfiles.DEFAULT_SOUND_PROFILE);
@@ -199,8 +208,9 @@ public class ShellPatterns {
             addDefaultPattern(shellTheme, pattern);
         }
 
-        //TODO Currently not compatible
         addDefaultPattern(ShellTheme.POLICE_BOX.getId(), "faded", true);
+        addDefaultPattern(ShellTheme.POLICE_BOX.getId(), "fourteen", true);
+        addDefaultPattern(ShellTheme.POLICE_BOX.getId(), "barbie", true);
 //        addDefaultPattern(ShellTheme.POLICE_BOX.getId(), "gaudy", false);
 //        addDefaultPattern(ShellTheme.POLICE_BOX.getId(), "metal", false);
 //        addDefaultPattern(ShellTheme.POLICE_BOX.getId(), "stone", false);
@@ -216,12 +226,26 @@ public class ShellPatterns {
 
         addDefaultPattern(ShellTheme.MYSTIC.getId(), "dwarven", false);
 
-        addDefaultPattern(ShellTheme.BIG_BEN.getId(), "gothic", false);
+        addDefaultPattern(ShellTheme.BIG_BEN.getId(), "gothic", true);
 
-        Map<ResourceLocation, List<ShellPattern>> patternsByCollection = new HashMap<>();
-        patternsByCollection.putAll(DEFAULT_PATTERNS);
 
-        return patternsByCollection;
+
+        ShellSoundProfile soundProfile = new ShellSoundProfile();
+        soundProfile.setDoorOpen(new ConfiguredSound(SoundEvents.SHULKER_BOX_OPEN));
+        soundProfile.setDoorClose(new ConfiguredSound(SoundEvents.SHULKER_BOX_CLOSE));
+
+        String[] shulkerColors = {
+                "black", "blue", "brown", "cyan", "gray", "green", "light_blue", "light_gray",
+                "lime", "magenta", "orange", "pink", "purple", "red", "white", "yellow"
+        };
+
+        for (String color : shulkerColors) {
+            addDefaultPattern(ShellTheme.SHULKER.getId(), "shulker_" + color, false, Optional.of(soundProfile));
+        }
+        addDefaultPattern(ShellTheme.SHULKER.getId(), "shulker", false, Optional.of(soundProfile));
+
+
+        return new HashMap<>(DEFAULT_PATTERNS);
     }
 
 }

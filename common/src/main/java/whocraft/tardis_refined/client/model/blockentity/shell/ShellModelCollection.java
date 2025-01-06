@@ -3,10 +3,12 @@ package whocraft.tardis_refined.client.model.blockentity.shell;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.resources.ResourceLocation;
-import whocraft.tardis_refined.TardisRefined;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import whocraft.tardis_refined.api.event.TardisClientEvents;
 import whocraft.tardis_refined.client.ModelRegistry;
 import whocraft.tardis_refined.client.model.blockentity.door.interior.*;
+import whocraft.tardis_refined.client.model.blockentity.shell.internal.door.ShulkerDoorModel;
 import whocraft.tardis_refined.client.model.blockentity.shell.shells.*;
 import whocraft.tardis_refined.common.tardis.themes.ShellTheme;
 import whocraft.tardis_refined.compat.ModCompatChecker;
@@ -17,10 +19,10 @@ import java.util.Map;
 public class ShellModelCollection {
 
     public static Map<ResourceLocation, ShellEntry> SHELL_MODELS = new HashMap<>();
-    private static ShellModel factoryShellModel, policeBoxModel, phoneBoothModel, mysticModel, drifterModel,
+    private static ShellModel shulkerShellModel, factoryShellModel, policeBoxModel, phoneBoothModel, mysticModel, drifterModel,
             presentModel, vendingModel, briefcaseModel, groeningModel, bigBenModel, nukaModel, growthModel,
             portalooModel, pagodaModel, liftModel, hieroglyphModel, castleShellModel, pathfinderShellModel, halfBakedShellModel;
-    private static ShellDoorModel factoryDoorModel, policeBoxDoorModel, phoneBoothDoorModel, mysticDoorModel, drifterDoorModel, presentDoorModel, vendingDoorModel, briefcaseDoorModel,
+    private static ShellDoorModel shulkerDoorModel, factoryDoorModel, policeBoxDoorModel, phoneBoothDoorModel, mysticDoorModel, drifterDoorModel, presentDoorModel, vendingDoorModel, briefcaseDoorModel,
             groeningDoorModel, bigBenDoorModel, nukaDoorModel, growthDoorModel, portalooDoorModel, pagodaDoorModel, liftDoorModel, hieroglyphDoorModel, castleDoorModel, pathfinderDoorModel, halfBakedDoorModel;
     private static ShellModelCollection instance = null;
 
@@ -67,6 +69,7 @@ public class ShellModelCollection {
         castleShellModel = new CastleShellModel(context.bakeLayer((ModelRegistry.CASTLE_SHELL)));
         pathfinderShellModel = new PathfinderShellModel(context.bakeLayer((ModelRegistry.PATHFINDER_SHELL)));
         halfBakedShellModel = new HalfBakedShellModel(context.bakeLayer((ModelRegistry.HALF_BAKED_SHELL)));
+        shulkerShellModel = new ShulkerShellModel(context.bakeLayer((ModelRegistry.SHULKER_SHELL)));
 
         // Doors
         factoryDoorModel = new DualInteriorDoorModel(context.bakeLayer((ModelRegistry.FACTORY_DOOR)), 250f);
@@ -91,13 +94,14 @@ public class ShellModelCollection {
 
         growthDoorModel = new GrowthDoorModel(context.bakeLayer((ModelRegistry.GROWTH_DOOR)));
 
-        pagodaDoorModel = new PagodaDoorModel(context.bakeLayer((ModelRegistry.PAGODA_DOOR)));
+        pagodaDoorModel = new SingleInteriorDoorModel(context.bakeLayer((ModelRegistry.PAGODA_DOOR)), -275f);
 
         liftDoorModel = new DualTexInteriorDoorModel(context.bakeLayer((ModelRegistry.LIFT_DOOR)));
 
         hieroglyphDoorModel = new DualTexInteriorDoorModel(context.bakeLayer((ModelRegistry.HIEROGLYPH_DOOR)));
 
         halfBakedDoorModel = new HalfBakedDoorModel(context.bakeLayer((ModelRegistry.HALF_BAKED_DOOR)));
+        shulkerDoorModel = new ShulkerDoorModel(context.bakeLayer((ModelRegistry.SHULKER_DOOR)));
 
 
         TardisClientEvents.SHELLENTRY_MODELS_SETUP.invoker().setUpShellAndInteriorModels(context);
@@ -121,13 +125,17 @@ public class ShellModelCollection {
         registerShellEntry(ShellTheme.CASTLE.get(), castleShellModel, castleDoorModel);
         registerShellEntry(ShellTheme.PATHFINDER.get(), pathfinderShellModel, pathfinderDoorModel);
         registerShellEntry(ShellTheme.HALF_BAKED.get(), halfBakedShellModel, halfBakedDoorModel);
+        registerShellEntry(ShellTheme.SHULKER.get(), shulkerShellModel, shulkerDoorModel);
         validateModels();
     }
+
+    public static Logger LOGGER = LogManager.getLogger("TardisRefined/ShellPatternProvider");
+
 
     private void validateModels() {
         for (ResourceLocation resourceLocation : ShellTheme.SHELL_THEME_DEFERRED_REGISTRY.keySet()) {
             if(!SHELL_MODELS.containsKey(resourceLocation)){
-                TardisRefined.LOGGER.info("There was no model setup for shell theme {}", resourceLocation);
+                LOGGER.info("There was no model setup for shell theme {}", resourceLocation);
             }
         }
     }

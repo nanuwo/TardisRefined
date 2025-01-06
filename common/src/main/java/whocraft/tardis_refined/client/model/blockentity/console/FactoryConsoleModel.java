@@ -2,19 +2,17 @@ package whocraft.tardis_refined.client.model.blockentity.console;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.jeryn.frame.tardis.Frame;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import whocraft.tardis_refined.TRConfig;
 import whocraft.tardis_refined.TardisRefined;
 import whocraft.tardis_refined.client.TardisClientData;
-import dev.jeryn.anim.tardis.JsonToAnimationDefinition;
 import whocraft.tardis_refined.common.block.console.GlobalConsoleBlock;
 import whocraft.tardis_refined.common.blockentity.console.GlobalConsoleBlockEntity;
 import whocraft.tardis_refined.common.tardis.manager.TardisPilotingManager;
@@ -22,14 +20,16 @@ import whocraft.tardis_refined.common.tardis.themes.ConsoleTheme;
 
 public class FactoryConsoleModel extends HierarchicalModel implements ConsoleUnit {
 
-    public static final AnimationDefinition IDLE = JsonToAnimationDefinition.loadAnimation(Minecraft.getInstance().getResourceManager(), new ResourceLocation(TardisRefined.MODID, "animated/console/factory/idle.json"));
-    public static final AnimationDefinition FLIGHT = JsonToAnimationDefinition.loadAnimation(Minecraft.getInstance().getResourceManager(), new ResourceLocation(TardisRefined.MODID, "animated/console/factory/flight.json"));
-    public static final AnimationDefinition CRASH = JsonToAnimationDefinition.loadAnimation(Minecraft.getInstance().getResourceManager(), new ResourceLocation(TardisRefined.MODID, "animated/console/factory/crash.json"));
-    public static final AnimationDefinition POWER_ON = JsonToAnimationDefinition.loadAnimation(Minecraft.getInstance().getResourceManager(), new ResourceLocation(TardisRefined.MODID, "animated/console/factory/power_on.json"));
-    public static final AnimationDefinition POWER_OFF = JsonToAnimationDefinition.loadAnimation(Minecraft.getInstance().getResourceManager(), new ResourceLocation(TardisRefined.MODID, "animated/console/factory/power_off.json"));
-
-
+    // Load Animations in
+    public static final AnimationDefinition IDLE = Frame.loadAnimation( new ResourceLocation(TardisRefined.MODID, "frame/console/factory/idle.json"));
+    public static final AnimationDefinition FLIGHT = Frame.loadAnimation( new ResourceLocation(TardisRefined.MODID, "frame/console/factory/flight.json"));
+    public static final AnimationDefinition CRASH = Frame.loadAnimation( new ResourceLocation(TardisRefined.MODID, "frame/console/factory/crash.json"));
+    public static final AnimationDefinition POWER_ON = Frame.loadAnimation( new ResourceLocation(TardisRefined.MODID, "frame/console/factory/power_on.json"));
+    public static final AnimationDefinition POWER_OFF = Frame.loadAnimation( new ResourceLocation(TardisRefined.MODID, "frame/console/factory/power_off.json"));
+    
     private static final ResourceLocation FACTORY_TEXTURE = new ResourceLocation(TardisRefined.MODID, "textures/blockentity/console/factory/factory_console.png");
+  
+  
     private final ModelPart root;
     private final ModelPart throttleLever;
     private final ModelPart handbrake;
@@ -37,8 +37,8 @@ public class FactoryConsoleModel extends HierarchicalModel implements ConsoleUni
 
     public FactoryConsoleModel(ModelPart root) {
         this.root = root;
-        this.throttleLever = JsonToAnimationDefinition.findPart(this, "lever2");
-        this.handbrake = (ModelPart) getAnyDescendantWithName("lever3").get();
+        this.throttleLever = Frame.findPart(this, "lever2");
+        this.handbrake = Frame.findPart(this, "lever3");
     }
 
 
@@ -54,12 +54,12 @@ public class FactoryConsoleModel extends HierarchicalModel implements ConsoleUni
         root().getAllParts().forEach(ModelPart::resetPose);
         TardisClientData reactions = TardisClientData.getInstance(level.dimension());
         if (globalConsoleBlock == null) return;
+        if (globalConsoleBlock.getBlockState() == null) return;
 
-        Boolean powered = globalConsoleBlock.getBlockState().getValue(GlobalConsoleBlock.POWERED);
+        Boolean powered = globalConsoleBlock.getBlockState() == null ? true : globalConsoleBlock.getBlockState().getValue(GlobalConsoleBlock.POWERED);
 
 
         if (powered) {
-
             if (!globalConsoleBlock.powerOn.isStarted()) {
                 globalConsoleBlock.powerOff.stop();
                 globalConsoleBlock.powerOn.start(Minecraft.getInstance().player.tickCount);
@@ -94,8 +94,8 @@ public class FactoryConsoleModel extends HierarchicalModel implements ConsoleUni
 
         this.handbrake.xRot = reactions.isHandbrakeEngaged() ? -155f : -125f;
         root().render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-
     }
+
 
 
     @Override

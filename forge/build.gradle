@@ -1,5 +1,7 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "me.shedaniel.unified-publishing" version "0.1.+"
+
 }
 architectury {
     platformSetupLoomIde()
@@ -14,9 +16,45 @@ sourceSets {
     }
 }
 
-remapJar {
-    atAccessWideners.add('tardis_refined.accesswidener')
+unifiedPublishing {
+    project {
+        displayName = "[NeoForge] Tardis Refined - $project.version"
+        releaseType = "release"
+        changelog = new File("${rootProject.projectDir}/changelog.md").text
+        gameVersions = ["$rootProject.minecraft_version"]
+        mainPublication tasks.remapJar
+        gameLoaders = ["neoforge"]
+        relations {
+            optional {
+                curseforge = "immersive-portals-mod"
+                modrinth = "immersiveportals"
+            }
+            optional {
+                curseforge = "curios"
+                modrinth = "curios"
+            }
+        }
+
+        var CURSE_API_KEY = project.findProperty("curseforge") ?: System.getenv("curseforge") ?: ""
+        if (CURSE_API_KEY != "") {
+            curseforge {
+                token = CURSE_API_KEY
+                id = "782697"
+                gameVersions.addAll "Java 17", "$rootProject.minecraft_version"
+            }
+        }
+
+        var MODRINTH_TOKEN = project.findProperty("modrinth") ?: System.getenv("modrinth") ?: ""
+        if (MODRINTH_TOKEN != "") {
+            modrinth {
+                token = MODRINTH_TOKEN
+                id = "nqVt6aES"
+                version = "neoforge-$project.version"
+            }
+        }
+    }
 }
+
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
@@ -81,39 +119,6 @@ dependencies {
 
 }
 
-if (System.getenv("curseforge") != null && System.getenv("modrinth") != null) {
-    unifiedPublishing {
-        project {
-            displayName = "[NeoForge] Tardis Refined - $project.version"
-            releaseType = "release"
-            changelog = new File("${rootProject.projectDir}/changelog.md").text
-            gameVersions = ["$rootProject.minecraft_version"]
-            mainPublication tasks.remapJar
-            gameLoaders = ["neoforge"]
-            relations {
-
-            }
-
-            var CURSE_API_KEY = project.findProperty("curseforge") ?: System.getenv("curseforge") ?: ""
-            if (CURSE_API_KEY != "") {
-                curseforge {
-                    token = CURSE_API_KEY
-                    id = "782697"
-                    gameVersions.addAll "Java 17", "$rootProject.minecraft_version"
-                }
-            }
-
-            var MODRINTH_TOKEN = project.findProperty("modrinth") ?: System.getenv("modrinth") ?: ""
-            if (MODRINTH_TOKEN != "") {
-                modrinth {
-                    token = MODRINTH_TOKEN
-                    id = "nqVt6aES"
-                    version = "neoforge-$project.version"
-                }
-            }
-        }
-    }
-}
 
 def resourceTargets = ["META-INF/mods.toml", "pack.mcmeta"]
 def intoTargets = ["$rootDir/out/production/resources/", "$rootDir/out/production/${project.name}.main/", "$rootDir/bin/main/"]
@@ -163,6 +168,7 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
+    archiveClassifier = 'forge'
 }
 
 sourcesJar {

@@ -65,7 +65,7 @@ public class ProgressionManager extends BaseHandler {
             return true;
         }
 
-        return ALLOWED_LEVELS.contains(level);
+        return getDiscoveredLevels().contains(level);
     }
 
 
@@ -73,7 +73,7 @@ public class ProgressionManager extends BaseHandler {
     public CompoundTag saveData(CompoundTag tag) {
         ListTag levelsList = new ListTag();
         for (ResourceKey<Level> level : ALLOWED_LEVELS) {
-            levelsList.add(StringTag.valueOf(level.toString()));
+            levelsList.add(StringTag.valueOf(level.location().toString()));
         }
         tag.put("DiscoveredLevels", levelsList);
         return tag;

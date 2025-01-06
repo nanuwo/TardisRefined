@@ -3,8 +3,13 @@ package whocraft.tardis_refined.common.crafting.astral_manipulator;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * Main ingredient object for a ManipulatorCraftingRecipe.
@@ -22,6 +27,8 @@ public class ManipulatorCraftingIngredient {
     private BlockPos relativeBlockPos;
     // The block state that must exist at that position.
     private BlockState blockState;
+
+    private Optional<TagKey<Block>> blockTagKey;
 
     public ManipulatorCraftingIngredient(BlockPos pos, Block block) {
         this(pos, block.defaultBlockState());
@@ -42,7 +49,9 @@ public class ManipulatorCraftingIngredient {
         if (!compared.blockState.is(this.blockState.getBlock())) {
             return false;
         }
-        return this.relativeBlockPos.getX() == compared.relativeBlockPos.getX() && this.relativeBlockPos.getY() == compared.relativeBlockPos.getY() && this.relativeBlockPos.getZ() == compared.relativeBlockPos.getZ();
+        return this.relativeBlockPos.getX() == compared.relativeBlockPos.getX() &&
+                this.relativeBlockPos.getY() == compared.relativeBlockPos.getY() &&
+                this.relativeBlockPos.getZ() == compared.relativeBlockPos.getZ();
     }
 
     /**
@@ -56,4 +65,3 @@ public class ManipulatorCraftingIngredient {
         return this.blockState;
     }
 }
-

@@ -13,7 +13,6 @@ public class ModMessages {
     public static final String UI_EXTERNAL_SHELL = ui("monitor.external_shell");
     public static final String UI_LIST_SELECTION = ui("monitor.list.selection");
     public static final String UI_DESKTOP_CONFIGURATION = ui("monitor.desktop");
-    public static final String UI_SHELL_SELECTION = ui("shell_selection");
     public static final String UI_MONITOR_GPS = ui("monitor.main.gps");
     public static final String UI_MONITOR_VORTEX = ui("monitor.main.vortex");
     public static final String UI_MONITOR_DESTINATION = ui("monitor.main.destination");
@@ -48,6 +47,7 @@ public class ModMessages {
     public static final String CONFIG_IP_COMPAT = config("immersive_portals");
     public static final String CONFIG_CONTROL_NAMES = config("control_names");
     public static final String CONFIG_IDLE_CONSOLE_ANIMS = config("console_idle_animations");
+    public static final String DISABLE_FANCY_RENDERING = config("disable_fancy_rendering");
     public static final String CONFIG_BANNED_DIMENSIONS = config("banned_dimensions");
     public static final String CMD_DIM_NOT_A_TARDIS = cmdOutput("dim_not_a_tardis");
     public static final String CMD_NO_INTERNAL_DOOR = cmdOutput("no_internal_door");
@@ -70,6 +70,9 @@ public class ModMessages {
     public static final String CMD_ARG_SHELL_INVALID = cmdArgInvalid("shell");
     public static final String KEYBIND_EXIT_VIEW = keybind("exit_exterior_view");
     public static final String KEYBIND_TOGGLE_INFO_EXTERIOR_VIEW = keybind("toggle_info_exterior_view");
+    public static final String VILLAGER_CAN_FLY = ui("villager_can_pilot");
+    public static final String DEMANDS_PAYMENT = message("demands_payment");
+    public static final String PILOT_TIME = message("pilot_time");
     public static String GITHUB_RELEASE_PAGE = "https://github.com/WhoCraft/TardisRefined/releases";
 
     /*Item Special cases*/

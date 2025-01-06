@@ -26,14 +26,13 @@ import whocraft.tardis_refined.common.blockentity.door.TardisInternalDoor;
 import whocraft.tardis_refined.common.blockentity.shell.GlobalShellBlockEntity;
 import whocraft.tardis_refined.common.capability.player.TardisPlayerInfo;
 import whocraft.tardis_refined.common.capability.tardis.upgrades.UpgradeHandler;
-import whocraft.tardis_refined.common.hum.TardisHums;
+import whocraft.tardis_refined.common.soundscape.hum.TardisHums;
 import whocraft.tardis_refined.common.blockentity.shell.ExteriorShell;
 import whocraft.tardis_refined.common.tardis.TardisArchitectureHandler;
 import whocraft.tardis_refined.common.tardis.TardisDesktops;
 import whocraft.tardis_refined.common.tardis.TardisNavLocation;
 import whocraft.tardis_refined.common.tardis.manager.*;
 import whocraft.tardis_refined.common.tardis.themes.ShellTheme;
-import whocraft.tardis_refined.common.util.Platform;
 import whocraft.tardis_refined.common.util.TardisHelper;
 import whocraft.tardis_refined.compat.ModCompatChecker;
 import whocraft.tardis_refined.compat.portals.ImmersivePortals;
@@ -41,6 +40,7 @@ import whocraft.tardis_refined.constants.NbtConstants;
 import whocraft.tardis_refined.patterns.ShellPattern;
 import whocraft.tardis_refined.patterns.ShellPatterns;
 import whocraft.tardis_refined.registry.TRBlockRegistry;
+import whocraft.tardis_refined.registry.TRDimensionTypes;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -282,7 +282,7 @@ public class TardisLevelOperator {
         if (aestheticHandler.getShellTheme() != null) {
             ResourceLocation theme = aestheticHandler.getShellTheme();
             if (ModCompatChecker.immersivePortals() && !(this.internalDoor instanceof RootShellDoorBlockEntity)) {
-                if (!ignoreDoor && ImmersivePortals.isShellThemeSupported(theme) && ImmersivePortals.doPortalsExistForTardis(UUID.fromString(doorLevel.dimension().location().getPath()))) {
+                if (!ignoreDoor && level.dimensionTypeId() == TRDimensionTypes.TARDIS && ImmersivePortals.isShellThemeSupported(theme) && ImmersivePortals.doPortalsExistForTardis(UUID.fromString(doorLevel.dimension().location().getPath()))) {
                     return false;
                 }
             }

@@ -15,6 +15,7 @@ import whocraft.tardis_refined.client.screen.main.MonitorOS;
 import whocraft.tardis_refined.common.network.messages.C2SChangeShell;
 import whocraft.tardis_refined.common.tardis.themes.ShellTheme;
 import whocraft.tardis_refined.constants.ModMessages;
+import whocraft.tardis_refined.patterns.ShellPattern;
 import whocraft.tardis_refined.patterns.ShellPatterns;
 
 import java.util.Collection;
@@ -22,10 +23,16 @@ import java.util.Comparator;
 
 public class ShellSelectionScreen extends MonitorOS.MonitorOSExtension {
 
+    private static ShellPattern PATTERN = ShellPatterns.DEFAULT;
     private Button patternButton;
 
     public ShellSelectionScreen(ResourceLocation currentShellTheme) {
-        super(Component.translatable(ModMessages.UI_SHELL_SELECTION), currentShellTheme);
+        super(Component.translatable(ModMessages.UI_EXTERNAL_SHELL), currentShellTheme);
+    }
+
+    @Override
+    public ResourceLocation getPatternForRender() {
+        return PATTERN.id();
     }
 
     @Override
@@ -44,6 +51,8 @@ public class ShellSelectionScreen extends MonitorOS.MonitorOSExtension {
 
         addSubmitButton(width / 2 + 90, height - vPos - 25);
         addCancelButton(width / 2 - 11, height - vPos - 25);
+
+
 
         patternButton = addRenderableWidget(Button.builder(Component.literal(""), button -> {
             PATTERN = ShellPatterns.next(PATTERNCOLLECTION, PATTERN);

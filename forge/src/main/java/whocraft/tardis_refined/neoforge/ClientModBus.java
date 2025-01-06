@@ -1,7 +1,9 @@
 package whocraft.tardis_refined.neoforge;
 
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -10,16 +12,17 @@ import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.world.item.Item;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import whocraft.tardis_refined.TardisRefined;
 import whocraft.tardis_refined.client.*;
 import whocraft.tardis_refined.client.model.pallidium.ModelLayerManager;
 import whocraft.tardis_refined.client.neoforge.ModelRegistryImpl;
+import whocraft.tardis_refined.client.particle.ParticleGallifrey;
 import whocraft.tardis_refined.client.renderer.blockentity.RootPlantRenderer;
 import whocraft.tardis_refined.client.renderer.blockentity.console.GlobalConsoleRenderer;
 import whocraft.tardis_refined.client.renderer.blockentity.device.ArtronPillarRenderer;
@@ -33,14 +36,15 @@ import whocraft.tardis_refined.client.renderer.blockentity.life.EyeRenderer;
 import whocraft.tardis_refined.client.renderer.blockentity.shell.GlobalShellRenderer;
 import whocraft.tardis_refined.client.renderer.blockentity.shell.RootShellRenderer;
 import whocraft.tardis_refined.client.renderer.entity.ControlEntityRenderer;
-import whocraft.tardis_refined.common.capability.player.TardisPlayerInfo;
 import whocraft.tardis_refined.common.items.DimensionSamplerItem;
 import whocraft.tardis_refined.mixin.forge.ReloadableResourceManagerMixin;
+import whocraft.tardis_refined.overlays.TardisRefinedOverlay;
 import whocraft.tardis_refined.registry.RegistrySupplier;
 import whocraft.tardis_refined.registry.TRBlockEntityRegistry;
 import whocraft.tardis_refined.registry.TREntityRegistry;
 import whocraft.tardis_refined.registry.TRItemRegistry;
 
+import java.io.IOException;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = TardisRefined.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -50,6 +54,12 @@ public class ClientModBus {
     public static void onItemColors(RegisterColorHandlersEvent.Item item) {
         item.register(TRItemColouring.SCREWDRIVER_COLORS, TRItemRegistry.SCREWDRIVER.get());
         item.register(TRItemColouring.SAMPLE_COLORS, TRItemRegistry.TEST_TUBE.get());
+    }
+
+    @SubscribeEvent
+    public static void onItemColors(RegisterShadersEvent registerShadersEvent) throws IOException {
+        registerShadersEvent.registerShader(new ShaderInstance(registerShadersEvent.getResourceProvider(), new ResourceLocation(TardisRefined.MODID, "nivis"), DefaultVertexFormat.NEW_ENTITY), (e) -> TRShaders.SNOW_SHADER = e);
+        registerShadersEvent.registerShader(new ShaderInstance(registerShadersEvent.getResourceProvider(), new ResourceLocation(TardisRefined.MODID, "glow_shader"), DefaultVertexFormat.NEW_ENTITY), (e) -> TRShaders.GLOW_SHADER = e);
     }
 
 
@@ -113,5 +123,9 @@ public class ClientModBus {
 
     }
 
+    @SubscribeEvent(priority = EventPriority.NORMAL)
+    public static void onRenderOverlay(RegisterGuiOverlaysEvent event) {
+        event.registerAboveAll(new ResourceLocation(TardisRefined.MODID, "overlay"), new TardisRefinedOverlay());
+    }
 
 }

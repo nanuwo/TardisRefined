@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import whocraft.tardis_refined.TardisRefined;
 import whocraft.tardis_refined.registry.DeferredRegistry;
+import whocraft.tardis_refined.registry.RegistrySupplier;
 import whocraft.tardis_refined.registry.RegistrySupplierHolder;
 
 public class ShellTheme implements Theme {
@@ -46,6 +47,8 @@ public class ShellTheme implements Theme {
     public static final RegistrySupplierHolder<ShellTheme, ShellTheme> HIEROGLYPH = registerShellTheme("hieroglyph");
     public static final RegistrySupplierHolder<ShellTheme, ShellTheme> CASTLE = registerShellTheme("castle");
     public static final RegistrySupplierHolder<ShellTheme, ShellTheme> PATHFINDER = registerShellTheme("pathfinder");
+    public static final RegistrySupplierHolder<ShellTheme, ShellTheme> SHULKER = registerShellTheme("shulker");
+
     private ResourceLocation translationKey;
     private boolean producesLight;
 

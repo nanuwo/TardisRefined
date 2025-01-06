@@ -12,9 +12,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import whocraft.tardis_refined.TardisRefined;
 import whocraft.tardis_refined.client.ModelRegistry;
-import whocraft.tardis_refined.client.ParticleGallifrey;
 import whocraft.tardis_refined.client.TRKeybinds;
 import whocraft.tardis_refined.client.TRParticles;
+import whocraft.tardis_refined.client.particle.ParticleGallifrey;
 import whocraft.tardis_refined.client.renderer.blockentity.RootPlantRenderer;
 import whocraft.tardis_refined.client.renderer.blockentity.console.GlobalConsoleRenderer;
 import whocraft.tardis_refined.client.renderer.blockentity.device.ArtronPillarRenderer;
@@ -40,7 +40,6 @@ import whocraft.tardis_refined.registry.TRItemRegistry;
 public class TardisRefinedFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-
         establishBlockEntityRenderers();
         ModelRegistry.init();
         ModEvents.addClientEvents();
@@ -48,6 +47,7 @@ public class TardisRefinedFabricClient implements ClientModInitializer {
         registerEntityRenderers();
 
         KeyBindingHelper.registerKeyBinding(TRKeybinds.EXIT_EXTERIOR_VIEW);
+        KeyBindingHelper.registerKeyBinding(TRKeybinds.TOGGLE_INFO_EXTERIOR_VIEW);
         ItemProperties.register(TRItemRegistry.TEST_TUBE.get(), new ResourceLocation(TardisRefined.MODID, "is_sampled"), (itemStack, clientLevel, livingEntity, i) -> DimensionSamplerItem.hasDimAtAll(itemStack) ? 1 : 0);
 
     }
