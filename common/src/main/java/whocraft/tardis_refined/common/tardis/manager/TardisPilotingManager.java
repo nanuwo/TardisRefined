@@ -281,7 +281,7 @@ public class TardisPilotingManager extends TickableHandler {
 
     private void checkThrottleStatesForFlight() {
         if (!isInFlight && !this.isHandbrakeOn && this.throttleStage != 0 && this.canBeginFlight()) {
-            this.beginFlight(false, null);
+            this.beginFlight(false);
         }
 
         // End the flight if the TARDIS is peacefully gliding.
@@ -529,7 +529,7 @@ public class TardisPilotingManager extends TickableHandler {
      *
      * @return false if didn't start flight, true if flight was started
      */
-    public boolean beginFlight(boolean autoLand, Optional<GlobalConsoleBlockEntity> consoleBlockEntity) {
+    public boolean beginFlight(boolean autoLand) {
 
         if (this.getFuel() < 50) {
 
