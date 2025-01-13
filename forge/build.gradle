@@ -169,6 +169,7 @@ remapJar {
 }
 
 sourcesJar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     def commonSources = project(":common").sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
@@ -197,7 +198,7 @@ publishing {
 
     repositories {
         maven {
-            url = "https://maven.craig.software/snapshots/"
+            url = "https://mvn.jeryn.dev/snapshots"
             credentials {
                 username = project.findProperty("MAVEN_REPO_USERNAME") ?: System.getenv("MAVEN_REPO_USERNAME") ?: ""
                 password = project.findProperty("MAVEN_REPO_PASSWORD") ?: System.getenv("MAVEN_REPO_PASSWORD") ?: ""

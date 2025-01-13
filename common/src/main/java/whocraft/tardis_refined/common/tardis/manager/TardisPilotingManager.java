@@ -22,6 +22,7 @@ import net.minecraft.world.phys.Vec3;
 import whocraft.tardis_refined.api.event.TardisCommonEvents;
 import whocraft.tardis_refined.common.block.console.GlobalConsoleBlock;
 import whocraft.tardis_refined.common.blockentity.console.GlobalConsoleBlockEntity;
+import whocraft.tardis_refined.common.blockentity.shell.ShellBaseBlockEntity;
 import whocraft.tardis_refined.common.capability.tardis.TardisLevelOperator;
 import whocraft.tardis_refined.common.capability.tardis.upgrades.IncrementUpgrade;
 import whocraft.tardis_refined.common.capability.tardis.upgrades.SpeedUpgrade;
@@ -92,6 +93,7 @@ public class TardisPilotingManager extends TickableHandler {
     private BlockPos currentConsoleBlockPos = BlockPos.ZERO;
 
     private boolean isPassivelyRefuelling = false;
+    private ShellBaseBlockEntity newCurrentBlockEntity;
 
     public TardisPilotingManager(TardisLevelOperator operator) {
         this.operator = operator;
@@ -1160,4 +1162,7 @@ public class TardisPilotingManager extends TickableHandler {
         return this.speedModifier;
     }
 
+    public void setCurrentLocationOnNextTick(ShellBaseBlockEntity blockEntity) {
+        this.newCurrentBlockEntity = blockEntity;
+    }
 }

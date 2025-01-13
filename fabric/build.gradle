@@ -56,6 +56,10 @@ repositories {
     }
 }
 
+sourceSets.main.resources {
+    srcDir project(":common").file("src/resources").absolutePath
+}
+
 def generatedResources = project(":forge").file("src/generated/resources")
 
 sourceSets {
@@ -242,7 +246,7 @@ publishing {
 
     repositories {
         maven {
-            url = "https://maven.craig.software/snapshots/"
+            url = "https://mvn.jeryn.dev/snapshots/"
             credentials {
                 username = project.findProperty("MAVEN_REPO_USERNAME") ?: System.getenv("MAVEN_REPO_USERNAME") ?: ""
                 password = project.findProperty("MAVEN_REPO_PASSWORD") ?: System.getenv("MAVEN_REPO_PASSWORD") ?: ""

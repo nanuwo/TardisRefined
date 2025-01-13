@@ -24,6 +24,7 @@ import whocraft.tardis_refined.common.block.shell.ShellBaseBlock;
 import whocraft.tardis_refined.common.blockentity.door.RootShellDoorBlockEntity;
 import whocraft.tardis_refined.common.blockentity.door.TardisInternalDoor;
 import whocraft.tardis_refined.common.blockentity.shell.GlobalShellBlockEntity;
+import whocraft.tardis_refined.common.blockentity.shell.ShellBaseBlockEntity;
 import whocraft.tardis_refined.common.capability.player.TardisPlayerInfo;
 import whocraft.tardis_refined.common.capability.tardis.upgrades.UpgradeHandler;
 import whocraft.tardis_refined.common.soundscape.hum.TardisHums;
@@ -572,6 +573,7 @@ public class TardisLevelOperator {
         return this.pilotingManager;
     }
 
+    
     public TardisWaypointManager getTardisWaypointManager() {
         return tardisWaypointManager;
     }
