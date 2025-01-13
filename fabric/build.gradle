@@ -88,7 +88,7 @@ dependencies {
     modImplementation "curse.maven:configured-457570:5180902"
 
     // Trinkets
-    modImplementation ("dev.emi:trinkets:${rootProject.trinkets_version}") {
+    modCompileOnly ("dev.emi:trinkets:${rootProject.trinkets_version}") {
         exclude(group: "dev.onyxstudios.cardinal-components-api")
     }
 
